@@ -1,3 +1,4 @@
+// Needed for IE11 support: https://caniuse.com/#search=closest
 if (!Element.prototype.matches)
   Element.prototype.matches = Element.prototype.msMatchesSelector ||
                               Element.prototype.webkitMatchesSelector;

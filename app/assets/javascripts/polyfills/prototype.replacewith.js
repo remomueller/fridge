@@ -1,3 +1,4 @@
+// Needed for IE11 and Micrsoft Edge 16 support: https://caniuse.com/#search=replaceWith
 function ReplaceWith(Ele) {
   'use-strict'; // For safari, and IE > 10
   var parent = this.parentNode,

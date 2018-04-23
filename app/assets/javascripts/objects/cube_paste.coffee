@@ -11,16 +11,15 @@
 
   # url = $(wrapper).data("url")
 
-  cube_wrapper = cubeWrapper(element)
-  url = $(cube_wrapper).data("url")
+  cube = new Cube(element)
+  url = cube.url
   console.log "url(1): #{url}"
-  if $(cube_wrapper).attr("data-cube")?
-    url += "/#{$(cube_wrapper).attr("data-cube")}/faces"
+  if cube.id?
+    url += "/#{cube.id}/faces"
   console.log "url(2): #{url}"
   if $(wrapper).attr("data-face")?
     url += "/#{$(wrapper).attr("data-face")}"
     params._method = "patch"
-
   console.log "url(3): #{url}"
 
   $.post(
@@ -46,18 +45,18 @@
     console.log "fail: #{data}"
   )
 
-@saveCubeNoCallbackPlusFaces = (element, event_type) ->
+@saveCube = (element, event_type) ->
   cube = new Cube(element)
   return if cube.unchanged()
   return if cube.saving
   return if cube.destroyed
-  console.log "saveCubeNoCallbackPlusFaces()"
+  console.log "saveCube()"
   cube.saving = "true"
   params = {}
   params.cube = {}
   params.cube.position = cube.position
   params.cube.text = cube.text
-  params.cube.cube_type = cube.cube_type
+  params.cube.cube_type = cube.cubeType
   # console.log params
   url = cube.url
   if cube.id?
@@ -84,7 +83,7 @@
       if event_type == "paste"
         $.each(faceWrappers(cube.wrapper), (index, face_wrapper) ->
           face_input = $(face_wrapper).find(".face-input")
-          saveFaceNoCallback(face_input)
+          saveFaceNoCallback(face_input[0])
         )
         saveFacePositions(cube.wrapper)
   ).fail((data) ->
@@ -134,12 +133,12 @@
       facePosition = 0
     multiline = true
     if facePosition == 0
-      saveCubeNoCallbackPlusFaces(currentElement, "paste")
+      saveCube(currentElement, "paste")
     # Save last cube if facePosition == 0
   )
   if multiline
     # Save last cube
-    saveCubeNoCallbackPlusFaces(nextElement, "paste")
+    saveCube(nextElement, "paste")
     setFocusEnd($(nextElement).find(".cube-input"))
     facesReady()
   e.preventDefault()
