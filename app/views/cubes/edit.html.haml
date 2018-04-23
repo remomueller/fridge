@@ -1,0 +1,7 @@
+%h1 Editing Cube
+
+= render "form", cube: @cube
+
+= link_to "Show", [@cube.tray, @cube]
+|
+= link_to "Back", tray_cubes_path(@tray)

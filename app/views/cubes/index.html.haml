@@ -1,0 +1,27 @@
+%h1 Cubes
+
+%table.table.table-borderless.table-striped
+  %thead
+    %tr
+      %th Position
+      %th Text
+      %th ID
+      %th Cube type
+      %th Tray
+      %th.text-center{ colspan: 3 } Actions
+
+  %tbody
+    - @cubes.includes(:tray).each do |cube|
+      %tr
+        %td= cube.position
+        %td= link_to cube.text.presence || cube.id, [cube.tray, cube]
+        %td= cube.id
+        %td= cube.cube_type
+        %td= link_to cube.tray.name, cube.tray
+        %td= link_to "Show", [cube.tray, cube]
+        %td= link_to "Edit", edit_tray_cube_path(cube.tray, cube)
+        %td= link_to "Destroy", [cube.tray, cube], method: :delete, data: { confirm: "Are you sure?" }
+
+%br
+
+= link_to "New Cube", new_tray_cube_path(@tray)

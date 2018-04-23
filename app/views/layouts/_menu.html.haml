@@ -1,0 +1,4 @@
+- menu = "menu-default" unless defined?(menu) && menu.present?
+%nav.navbar.navbar-dark{ class: menu }
+  .container
+    = link_to "Fridge", root_path, class: "navbar-brand"

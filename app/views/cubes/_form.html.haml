@@ -1,0 +1,29 @@
+= form_with model: [cube.tray, cube], local: true do |form|
+  - if cube.errors.any?
+    #error_explanation
+      %h2
+        = pluralize(cube.errors.count, "error")
+        prohibited this cube from being saved:
+
+      %ul
+        - cube.errors.full_messages.each do |message|
+          %li= message
+
+  .field
+    = form.label :tray_id
+    = form.number_field :tray_id
+
+  .field
+    = form.label :text
+    = form.text_field :text
+
+  .field
+    = form.label :description
+    = form.text_area :description
+
+  .field
+    = form.label :cube_type
+    = form.select :cube_type, Cube::CUBE_TYPES
+
+  .actions
+    = form.submit

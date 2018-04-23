@@ -1,0 +1,15 @@
+%p
+  %strong Cube
+  = @face.cube_id
+
+%p
+  %strong Position
+  = @face.position
+
+%p
+  %strong Text
+  = @face.text
+
+= link_to "Edit", edit_tray_cube_face_path(@face.cube.tray, @face.cube, @face)
+|
+= link_to "Back", [@face.cube.tray, @face.cube, :faces]

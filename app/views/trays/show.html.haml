@@ -1,0 +1,40 @@
+%h1
+  .float-right= link_to "Destroy Cubes", tray_cubes_path(@tray), method: :delete, class: "btn btn-sm btn-danger"
+  = @tray.name
+
+%p
+  = link_to "Edit", edit_tray_path(@tray)
+  = link_to "Cubes", tray_cubes_path(@tray)
+  = link_to "Back", trays_path
+
+
+%p
+  %strong Slug
+  = @tray.slug
+
+#output.text-monospace 0
+
+- enter_question_placeholder = "Enter question here..."
+- enter_option_placeholder = "choice"
+
+%div.d-none#language{ data: { enter_question_placeholder: enter_question_placeholder, enter_option_placeholder: enter_option_placeholder } }
+
+%hr
+
+.d-flex.flex-row
+  #cubes.w-100
+    - @tray.cubes.includes(:tray).each do |cube|
+      = render "cubes/wrapper", cube: cube
+
+    - if @tray.cubes.blank?
+      - cube = @tray.cubes.new(position: 1)
+      = render "cubes/wrapper", cube: cube
+  #cube-details-edit-box.w-25.cube-details-edit-box.d-none{ data: { url: tray_cubes_path(@tray) }}
+    .float-right
+      = link_to "#", data: { object: "cube-details-clicker-close" }, class: "text-muted", style: "text-decoration: none;" do
+        &times;
+    #cube-details-id Ø
+    = form_with model: Cube.new, url: "#" do |form|
+      .form-group
+        = form.label :cube_type
+        = form.select :cube_type, Cube::CUBE_TYPES, {}, class: "form-control"

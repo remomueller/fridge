@@ -1,0 +1,21 @@
+= link_to "Faces", [@cube.tray, @cube, :faces]
+
+%p
+  %strong Tray
+  = @cube.tray_id
+
+%p
+  %strong Text
+  = @cube.text
+
+%p
+  %strong Description
+  = @cube.description
+
+%p
+  %strong Cube type
+  = @cube.cube_type
+
+= link_to "Edit", edit_tray_cube_path(@cube.tray, @cube)
+|
+= link_to "Back", tray_cubes_path(@tray)

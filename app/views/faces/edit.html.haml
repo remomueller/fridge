@@ -1,0 +1,7 @@
+%h1 Editing Face
+
+= render "form", face: @face
+
+= link_to "Show", [@face.cube.tray, @face.cube, @face]
+|
+= link_to "Back", [@face.cube.tray, @face.cube, :faces]

@@ -1,0 +1,21 @@
+%h1
+  .float-right= link_to "New Face", new_tray_cube_face_path(@tray, @cube), class: "btn btn-sm btn-primary"
+  Faces
+
+%table.table.table-borderless.table-striped
+  %thead
+    %tr
+      %th Position
+      %th Text
+      %th Cube
+      %th{ colspan: 3 }
+
+  %tbody
+    - @faces.includes(cube: :tray).each do |face|
+      %tr
+        %td= face.position
+        %td= face.text
+        %td= link_to face.cube.text, [face.cube.tray, face.cube]
+        %td= link_to "Show", [face.cube.tray, face.cube, face]
+        %td= link_to "Edit", edit_tray_cube_face_path(face.cube.tray, face.cube, face)
+        %td= link_to "Destroy", [face.cube.tray, face.cube, face], method: :delete, data: { confirm: "Are you sure?" }

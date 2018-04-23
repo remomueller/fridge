@@ -1,0 +1,11 @@
+= form_with model: [face.cube.tray, face.cube, face], local: true do |form|
+  .field
+    = form.label :position
+    = form.number_field :position
+
+  .field
+    = form.label :text
+    = form.text_area :text
+
+  .actions
+    = form.submit
