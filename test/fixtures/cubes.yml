@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  tray: one
+  text: MyString
+  description: MyText
+  cube_type: MyString
+
+two:
+  tray: one
+  text: MyString
+  description: MyText
+  cube_type: MyString
