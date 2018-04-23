@@ -1,2 +1,3 @@
-# fridge
-Test application for building slice forms
+# Fridge
+
+Test application for building slice forms.
