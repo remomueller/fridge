@@ -88,16 +88,6 @@ Cube.prototype = {
     this.wrapper.setAttribute("data-cube-type", val);
   },
 
-  // get cube_type() { // TODO: Change to cubeType Remove function
-  //   console.log("DEPRECATED: cube_type is deprecated, used cubeType instead.");
-  //   return this.cubeType;
-  // },
-
-  // set cube_type(val) { // TODO: Change to cubeType Remove function
-  //   console.log("DEPRECATED: cube_type= is deprecated, used cubeType= instead.");
-  //   this.cubeType = val;
-  // },
-
   get url() {
     return this.wrapper.getAttribute("data-url");
   },
