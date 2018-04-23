@@ -148,7 +148,7 @@ $(document)
     else if e.which == 46 && $(wrapper).next("[data-object=cube-wrapper]").length > 0 && $(this).getCursorPosition() == 0 && nothingSelected($(this)) && $(this).val() == ""
       cubeNextAndDelete(thisCube)
       e.preventDefault()
-    else if e.which == 38 && prevCube.hasFaces() && prevCube.faces.length > 0
+    else if e.which == 38 && prevCube && prevCube.hasFaces() && prevCube.faces.length > 0
       faceChildLast(prev_wrapper)
     else if e.which == 38 && prevCube
       cubeSetFocusEnd(prevCube)

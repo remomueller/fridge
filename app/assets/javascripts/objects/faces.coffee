@@ -67,16 +67,15 @@
   params.face.text = $(element).val()
 
 
-  cube_wrapper = cubeWrapper(element)
-  url = $(cube_wrapper).data("url")
+  cube = new Cube(element)
+  url = cube.url
   console.log "url(1): #{url}"
-  if $(cube_wrapper).attr("data-cube")?
-    url += "/#{$(cube_wrapper).attr("data-cube")}/faces"
+  if cube.id?
+    url += "/#{cube.id}/faces"
   console.log "url(2): #{url}"
   if $(wrapper).attr("data-face")?
     url += "/#{$(wrapper).attr("data-face")}"
     params._method = "patch"
-
   console.log "url(3): #{url}"
 
 
@@ -103,13 +102,13 @@
       $(element).val(data.text)
       redrawFacePosition(wrapper)
       redrawFaceWrapper(wrapper, element)
-      saveFacePositions(cubeWrapper(wrapper))
+      saveFacePositions(cube.wrapper)
   ).fail((data) ->
     console.log "fail: #{data}"
   )
 
 @saveFacePositions = (cube_wrapper) ->
-  # console.log "saveFacePositions()"
+  console.log "saveFacePositions()"
   url = ""
   params = {}
   params.faces = {}

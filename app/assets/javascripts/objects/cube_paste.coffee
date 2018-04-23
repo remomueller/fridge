@@ -122,12 +122,12 @@
   $.each(array, (index, text) ->
     currentElement = nextElement
     if text[0] == "-"
-      cube_wrapper = cubeWrapper(nextElement)
+      cube = new Cube(nextElement)
       if facePosition == 0
-        cube_wrapper.attr("data-cube-type", "choice")
-        redrawCubeCubeType(cube_wrapper)
+        cube.cubeType = "choice"
+        cube.redrawCubeType()
       facePosition += 1
-      appendNewFaceToCubeWrapper(cube_wrapper, facePosition, $.trim(text.slice(1)))
+      appendNewFaceToCubeWrapper(cube.wrapper, facePosition, $.trim(text.slice(1)))
     else
       nextElement = tray.appendCube(nextElement, text)
       facePosition = 0
