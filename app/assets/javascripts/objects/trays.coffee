@@ -1,20 +1,3 @@
-# class Animal
-#   price: 5
-
-#   sell: =>
-#     alert "Give me #{@price} shillings!"
-
-# animal = new Animal("Parrot")
-# alert "Animal is a #{animal.name}"
-
-# @Tray = (a) ->
-#   @a = a
-#   return
-
-# @Tray::cubes = ->
-#   $("[data-object~=cube-wrapper]").map((w) -> new Cube(w))
-
-
 ################################################################################
 
 @cubeWrapper = (element) ->

@@ -1,14 +1,3 @@
-# @Face = (element) ->
-#   if $(element).hasClass("face-wrapper")
-#     @wrapper = $(element).first()
-#   else
-#     @wrapper = $(element).closest("[data-object~=face-wrapper]")
-#   return
-
-# @Face::cube = ->
-#   new Cube(@wrapper)
-
-
 @faceWrappers = (element) ->
   $(element).find("[data-object~=face-wrapper]")
 

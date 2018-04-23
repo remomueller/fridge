@@ -157,17 +157,17 @@ Cube.prototype = {
     }
   },
 
-  _template: function(text) {
-    if (text == null) text = "";
-    var cube_input = document.createElement("INPUT");
-    cube_input.classList.add("cube-input");
-    cube_input.setAttribute("placeholder", document.getElementById("language").getAttribute("data-enter-question-placeholder"));
-    cube_input.setAttribute("type", "text");
-    cube_input.setAttribute("value", text);
+  redrawCubeType: function() {
+    console.log("redrawCubeType()");
+    var cube_type = this.wrapper.querySelector(".cube-type");
+    cube_type.replaceWith(this._template_cube_type(this.cubeType));
+  },
 
+  _template_cube_type: function(type) {
+    if (type == null) type = "string";
     var small_link = document.createElement("SMALL");
     var cube_type_link = document.createElement("A");
-    var cube_type_link_text = document.createTextNode("string");
+    var cube_type_link_text = document.createTextNode(type);
     cube_type_link.setAttribute("data-object", "cube-details-clicker");
     cube_type_link.setAttribute("href", "#");
     cube_type_link.appendChild(cube_type_link_text);
@@ -176,6 +176,19 @@ Cube.prototype = {
     var cube_type = document.createElement("DIV");
     cube_type.classList.add("cube-type");
     cube_type.appendChild(small_link);
+
+    return cube_type;
+  },
+
+  _template: function(text) {
+    if (text == null) text = "";
+    var cube_input = document.createElement("INPUT");
+    cube_input.classList.add("cube-input");
+    cube_input.setAttribute("placeholder", document.getElementById("language").getAttribute("data-enter-question-placeholder"));
+    cube_input.setAttribute("type", "text");
+    cube_input.setAttribute("value", text);
+
+    var cube_type = this._template_cube_type();
 
     var small_id = document.createElement("SMALL");
     var text_id = document.createTextNode(" #Ø");

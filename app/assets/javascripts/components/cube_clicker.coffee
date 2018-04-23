@@ -1,20 +1,18 @@
 $(document)
   .on("click", "[data-object~=cube-details-clicker]", ->
-    cube_wrapper = cubeWrapper(this)
+    cube = new Cube(this)
     $("#cube-details-edit-box").removeClass("d-none")
-    $("#cube-details-edit-box").data("cube", cube_wrapper.data("cube"))
-    $("#cube-details-id").html(cube_wrapper.data("cube"))
-    $("#cube_cube_type").val(cube_wrapper.attr("data-cube-type"))
-    console.log $("#cube-details-edit-box").data("cube")
-    # cubeWrapper(this).find(".cube-input").toggleClass("active")
+    $("#cube-details-edit-box").data("cube", cube.id)
+    $("#cube-details-id").html(cube.id)
+    $("#cube_cube_type").val(cube.cubeType)
+    # console.log $("#cube-details-edit-box").data("cube")
+    # $(cube.input).toggleClass("active")
     false
   )
   .on("change", "#cube_cube_type", ->
     $element = $("#cube-details-edit-box")
-    console.log "YOYYO"
     return unless !!$element.data("cube")
-    console.log "cube_type change"
-
+    # console.log "cube_type change"
     params = {}
     params.cube = {}
     params.cube.cube_type = $(this).val()
@@ -30,12 +28,12 @@ $(document)
       "json"
     ).done((data) ->
       if data?
-        console.log "DATA:"
-        cube_wrapper = $("[data-object~=cube-wrapper][data-cube=#{data.id}]").first()
-        cube_wrapper.attr("data-cube-type", data.cube_type)
-        redrawCubeCubeType(cube_wrapper)
-        if hasCubeFaces(cube_wrapper) && faceWrappers(cube_wrapper).length == 0
-          appendNewFaceToCubeWrapper(cube_wrapper)
+        element = document.querySelector("[data-object~=\"cube-wrapper\"][data-cube=\"#{data.id}\"]")
+        cube = new Cube(element)
+        cube.cubeType = data.cube_type
+        cube.redrawCubeType()
+        if cube.hasFaces() && cube.faces.length == 0
+          appendNewFaceToCubeWrapper(cube.wrapper) # TODO: Replace function
     ).fail((data) ->
       console.log "fail: #{data}"
     )
