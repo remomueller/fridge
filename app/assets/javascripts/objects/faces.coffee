@@ -1,3 +1,19 @@
+@facesReady = ->
+  $.each($(".cube-faces"), ->
+    $this = $(this)
+    $this.sortable(
+      axis: "y"
+      forcePlaceholderSize: true
+      handle: ".face-id"
+      placeholder: "face-wrapper-placeholder"
+      stop: (event, ui) ->
+        wrapper = faceWrappers($this).first()
+        if wrapper
+          updateFacePosition(wrapper, 1)
+          updateFacePositions(wrapper)
+    )
+  )
+
 @faceWrappers = (element) ->
   $(element).find("[data-object~=face-wrapper]")
 
@@ -35,78 +51,6 @@
   url = $(wrapper).data("url")
   faceTemplateHelper(tray, cube, url, position, text)
 
-@facesReady = ->
-  $.each($(".cube-faces"), ->
-    $this = $(this)
-    $this.sortable(
-      axis: "y"
-      forcePlaceholderSize: true
-      handle: ".face-id"
-      placeholder: "face-wrapper-placeholder"
-      stop: (event, ui) ->
-        wrapper = faceWrappers($this).first()
-        if wrapper
-          updateFacePosition(wrapper, 1)
-          updateFacePositions(wrapper)
-    )
-  )
-
-@faceTextUnchanged = (wrapper, element) ->
-  $(wrapper).attr("data-text") == $(element).val()
-
-@faceTextChanged = (wrapper, element) ->
-  $(wrapper).attr("data-text") != $(element).val()
-
-@saveFace = (element) ->
-  wrapper = faceWrapper(element)
-  return if faceTextUnchanged(wrapper, element)
-  return if $(wrapper).data("destroyed")
-  params = {}
-  params.face = {}
-  params.face.position = $(wrapper).attr("data-position")
-  params.face.text = $(element).val()
-
-
-  cube = new Cube(element)
-  url = cube.url
-  console.log "url(1): #{url}"
-  if cube.id?
-    url += "/#{cube.id}/faces"
-  console.log "url(2): #{url}"
-  if $(wrapper).attr("data-face")?
-    url += "/#{$(wrapper).attr("data-face")}"
-    params._method = "patch"
-  console.log "url(3): #{url}"
-
-
-  # url = $(wrapper).data("url")
-  # if $(wrapper).data("face")?
-  #   url += "/#{$(wrapper).data("face")}"
-  #   params._method = "patch"
-
-  $.post(
-    url
-    params
-    null
-    "json"
-  ).done((data) ->
-    if data?
-      $(wrapper).attr("data-position-original", parseInt(data.position))
-
-      # Set this using an attribute, so that you can search for it using
-      # selectors later in saveFacePositions callback.
-      $(wrapper).attr("data-face", data.id)
-      # $(wrapper).data("face", data.id) # This doesn't work, see above.
-
-      $(wrapper).attr("data-text", data.text)
-      $(element).val(data.text)
-      redrawFacePosition(wrapper)
-      redrawFaceWrapper(wrapper, element)
-      saveFacePositions(cube.wrapper)
-  ).fail((data) ->
-    console.log "fail: #{data}"
-  )
-
 @saveFacePositions = (cube_wrapper) ->
   console.log "saveFacePositions()"
   url = ""
@@ -142,23 +86,25 @@
     console.log "#{data}"
   )
 
-@destroyFace = (element) ->
+@destroyFace = (face) ->
   # console.log "destroyFace"
-  wrapper = faceWrapper(element)
-  if !!$(wrapper).data("face")
+  face.destroyed == "true"
+  if !!face.id
     params = {}
     params._method = "delete"
-    url = "#{$(wrapper).data("url")}/#{$(wrapper).data("face")}"
+    url = "#{face.url}/#{face.id}"
     $.post(
       url
       params
       null
       "json"
     ).done((data) ->
-      saveFacePositions(cubeWrapper(wrapper)) # Wait for completion
+      # TODO: change how face positions are saved (refactor)
+      saveFacePositions(face.cube.wrapper) # Wait for completion
     )
   else
-    saveFacePositions(cubeWrapper(wrapper)) # Always save face positions
+    # TODO: change how face positions are saved (refactor)
+    saveFacePositions(face.cube.wrapper) # Always save face positions
 
 @appendNewFace = (element, text = "") ->
   # console.log "appendNewFace"
@@ -190,39 +136,31 @@
   else
     $(wrapper).removeClass("face-wrapper-unsaved-position")
 
-@redrawFaceWrapper = (wrapper, element) ->
-  $(wrapper).removeClass("face-wrapper-unsaved")
-  if faceTextChanged(wrapper, element)
-    $(wrapper).addClass("face-wrapper-unsaved")
-  else
-    $(wrapper).removeClass("face-wrapper-unsaved")
+@removeFace = (face) ->
+  return unless face.text == ""
+  updateFacePositions(face.wrapper, face.position - 1)
+  destroyFace(face)
+  face.removeFromDOM()
 
-@removeFace = (element) ->
-  wrapper = faceWrapper(element)
-  return unless $(element).val() == ""
-  updateFacePositions(wrapper, parseInt($(wrapper).attr("data-position")) - 1)
-  destroyFace(element)
-  $(wrapper).remove()
+@facePrevAndDelete = (face) ->
+  face.destroyed = "true" # Make sure face isn't saved on input blur.
+  faceSetFocusEnd(face.prevFace)
+  removeFace(face) if face.text == ""
 
-@facePrevAndDelete = (element) ->
-  wrapper = faceWrapper(element)
-  $(wrapper).data("destroyed", true) # Make sure face isn't saved on input blur.
-  setFocusEnd($(wrapper).prev("[data-object=face-wrapper]").find(".face-input"))
-  removeFace($(element)) if $(element).val() == ""
-
-@faceNextAndDelete = (element) ->
-  wrapper = faceWrapper(element)
-  $(wrapper).data("destroyed", true) # Make sure face isn't saved on input blur.
-  setFocusStart($(wrapper).next("[data-object=face-wrapper]").find(".face-input"))
-  removeFace($(element)) if $(element).val() == ""
+@faceNextAndDelete = (face) ->
+  face.destroyed = "true" # Make sure face isn't saved on input blur.
+  faceSetFocusStart(face.nextFace)
+  removeFace(face) if face.text == ""
 
 @facePrev = (element) ->
-  wrapper = faceWrapper(element)
-  setFocusEnd($(wrapper).prev("[data-object=face-wrapper]").find(".face-input"))
+  cube = new Cube(element)
+  face = new Face(element, cube)
+  faceSetFocusEnd(face.prevFace)
 
 @faceNext = (element) ->
-  wrapper = faceWrapper(element)
-  setFocusEnd($(wrapper).next("[data-object=face-wrapper]").find(".face-input"))
+  cube = new Cube(element)
+  face = new Face(element, cube)
+  faceSetFocusEnd(face.nextFace)
 
 @faceChildFirst = (cube_wrapper) ->
   setFocusEnd($(cube_wrapper).find("[data-object~=face-wrapper]").first().find(".face-input"))
@@ -230,31 +168,37 @@
 @faceChildLast = (cube_wrapper) ->
   setFocusEnd($(cube_wrapper).find("[data-object~=face-wrapper]").last().find(".face-input"))
 
-# Check if changes are made to element text.
-@faceChangesMade = (element) ->
-  wrapper = faceWrapper(element)
-  redrawFaceWrapper(wrapper, element)
+@faceSetFocusEnd = (face) -> # Could be refactored to work for cubes and faces
+  setFocusEnd(face.input) if face && face.input
+
+@faceSetFocusStart = (face) -> # Could be refactored to work for cubes and faces
+  setFocusStart(face.input) if face && face.input
 
 $(document)
   .on("keydown", "[data-object=face-wrapper] .face-input", (e) ->
     tray = new Tray
     wrapper = faceWrapper(this)
+
+    thisCube = new Cube(this) # TODO: Cleanup
+    thisFace = new Face(this, thisCube) # TODO, make cube optional?
+
     $("#output").text e.which
     if e.which == 13
       if $(this).val() == "" && $(wrapper).next("[data-object=face-wrapper]").length == 0
         $(wrapper).data("destroyed", true) unless $(wrapper).prev("[data-object=face-wrapper]").length == 0
         tray.appendCube(this)
         cubeNext(this)
-        removeFace(this) unless $(wrapper).prev("[data-object=face-wrapper]").length == 0
+        removeFace(thisFace) unless $(wrapper).prev("[data-object=face-wrapper]").length == 0
       else
         appendNewFace(this)
         faceNext(this)
       e.preventDefault()
     else if e.which == 8 && $(wrapper).prev("[data-object=face-wrapper]").length > 0 && $(this).getCursorPosition() == 0 && nothingSelected($(this)) && $(this).val() == ""
-      facePrevAndDelete($(this))
+
+      facePrevAndDelete(thisFace)
       e.preventDefault()
     else if e.which == 46 && $(wrapper).next("[data-object=face-wrapper]").length > 0 && $(this).getCursorPosition() == 0 && nothingSelected($(this)) && $(this).val() == ""
-      faceNextAndDelete($(this))
+      faceNextAndDelete(thisFace)
       e.preventDefault()
     else if e.which == 38
       if $(wrapper).prev("[data-object=face-wrapper]").length > 0
@@ -273,8 +217,10 @@ $(document)
       e.preventDefault()
   )
   .on("keyup", "[data-object=face-wrapper] .face-input", (e) ->
-    faceChangesMade(this)
+    cube = new Cube(this)
+    face = new Face(this, cube)
+    face.redrawText()
   )
   .on("blur", "[data-object=face-wrapper] .face-input", (e) ->
-    saveFace(this)
+    saveFace(this, "blur")
   )

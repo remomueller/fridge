@@ -109,10 +109,8 @@
   removeCube(cube) if cube.text == ""
 
 @cubeNext = (element) ->
-  console.log "cubeNext"
   cube = new Cube(element)
-  next = cube.nextCube
-  cubeSetFocusEnd(next) if next
+  cubeSetFocusEnd(cube.nextCube)
 
 @cubeParent = (element) ->
   cube = new Cube(element)

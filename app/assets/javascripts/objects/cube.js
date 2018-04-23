@@ -125,6 +125,7 @@ Cube.prototype = {
   redraw: function() {
     this.redrawText();
     this.redrawPosition();
+    // this.redrawCubeType(); // TODO: Check if this should be redrawn as well.
   },
 
   redrawPosition: function() {

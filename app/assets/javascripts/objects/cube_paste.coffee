@@ -1,24 +1,23 @@
-@saveFaceNoCallback = (element) ->
-  console.log "saveFaceNoCallback()"
-  wrapper = faceWrapper(element)
-  # return if faceTextUnchanged(wrapper, element)
-  return if $(wrapper).data("destroyed")
+@saveFace = (element, event_type) ->
+  cube = new Cube(element)
+  face = new Face(element, cube)
+  return if face.unchanged()
+  return if face.saving
+  return if face.destroyed
+  console.log "saveFace()"
+  face.saving = "true"
   params = {}
   params.face = {}
-  params.face.position = $(wrapper).attr("data-position")
-  params.face.text = $(element).val()
+  params.face.position = face.position
+  params.face.text = face.text
 
-
-  # url = $(wrapper).data("url")
-
-  cube = new Cube(element)
   url = cube.url
   console.log "url(1): #{url}"
   if cube.id?
     url += "/#{cube.id}/faces"
   console.log "url(2): #{url}"
-  if $(wrapper).attr("data-face")?
-    url += "/#{$(wrapper).attr("data-face")}"
+  if face.id?
+    url += "/#{face.id}"
     params._method = "patch"
   console.log "url(3): #{url}"
 
@@ -29,19 +28,15 @@
     "json"
   ).done((data) ->
     if data?
-      $(wrapper).attr("data-position-original", parseInt(data.position))
-
-      # Set this using an attribute, so that you can search for it using
-      # selectors later in saveFacePositions callback.
-      $(wrapper).attr("data-face", data.id)
-      # $(wrapper).data("face", data.id) # This doesn't work, see above.
-
-      $(wrapper).attr("data-text", data.text)
-      $(element).val(data.text)
-      redrawFacePosition(wrapper)
-      redrawFaceWrapper(wrapper, element)
-      # saveFacePositions(cubeWrapper(wrapper))
+      face.positionOriginal = data.position
+      face.id = data.id
+      face.textOriginal = data.text
+      face.text = data.text
+      face.saving = "false"
+      face.redraw()
+      saveFacePositions(cube.wrapper) if event_type == "blur"
   ).fail((data) ->
+    face.saving = "false"
     console.log "fail: #{data}"
   )
 
@@ -83,7 +78,7 @@
       if event_type == "paste"
         $.each(faceWrappers(cube.wrapper), (index, face_wrapper) ->
           face_input = $(face_wrapper).find(".face-input")
-          saveFaceNoCallback(face_input[0])
+          saveFace(face_input[0], event_type)
         )
         saveFacePositions(cube.wrapper)
   ).fail((data) ->
