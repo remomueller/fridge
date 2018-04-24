@@ -166,7 +166,8 @@ $(document)
     cube.redrawText() # Shouldn't need a full redraw.
   )
   .on("blur", "[data-object=cube-wrapper] .cube-input", (e) ->
-    saveCube(this, "blur")
+    cube = new Cube(this)
+    cube.save("blur")
   )
   .on("paste", "[data-object=cube-wrapper] .cube-input", (e) ->
     cubePasteEvent(e)

@@ -93,7 +93,7 @@ Cube.prototype = {
   },
 
   get saving() {
-    return this.wrapper.getAttribute("data-saving") == "true";
+    return this.wrapper.getAttribute("data-saving") === "true";
   },
 
   set saving(val) {
@@ -101,7 +101,7 @@ Cube.prototype = {
   },
 
   get destroyed() {
-    return this.wrapper.getAttribute("data-destroyed") == "true";
+    return this.wrapper.getAttribute("data-destroyed") === "true";
   },
 
   set destroyed(val) {
@@ -149,7 +149,7 @@ Cube.prototype = {
   },
 
   redrawCubeType: function() {
-    console.log("redrawCubeType()");
+    // console.log("redrawCubeType()");
     var cube_type = this.wrapper.querySelector(".cube-type");
     cube_type.replaceWith(this._template_cube_type(this.cubeType));
   },
@@ -219,14 +219,7 @@ Cube.prototype = {
     return element; // TODO: Make this return a cube object.
   },
 
-  save: function() {
-    console.log("cube.save();");
-  },
-
   changed: function() {
-    // console.log("CHANGED? ")
-    // console.log("this._textChanged(): " + this._textChanged())
-    // console.log("this._positionChanged(): " + this._positionChanged())
     return (this._positionChanged() || this._textChanged());
   },
 
@@ -240,7 +233,7 @@ Cube.prototype = {
   },
 
   removeFromDOM: function() {
-    console.log("removeFromDOM()");
+    // console.log("removeFromDOM()");
     this.wrapper.remove();
     this._destroy();
   }

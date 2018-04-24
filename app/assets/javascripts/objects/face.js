@@ -75,7 +75,7 @@ Face.prototype = {
   },
 
   get saving() {
-    return this.wrapper.getAttribute("data-saving") == "true";
+    return this.wrapper.getAttribute("data-saving") === "true";
   },
 
   set saving(val) {
@@ -83,7 +83,7 @@ Face.prototype = {
   },
 
   get destroyed() {
-    return this.wrapper.getAttribute("data-destroyed") == "true";
+    return this.wrapper.getAttribute("data-destroyed") === "true";
   },
 
   set destroyed(val) {
