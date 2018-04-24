@@ -143,9 +143,6 @@ Face.prototype = {
   },
 
   changed: function() {
-    // console.log("CHANGED? ")
-    // console.log("this._textChanged(): " + this._textChanged())
-    // console.log("this._positionChanged(): " + this._positionChanged())
     return (this._positionChanged() || this._textChanged());
   },
 
@@ -154,7 +151,7 @@ Face.prototype = {
   },
 
   removeFromDOM: function() {
-    console.log("removeFromDOM()");
+    // console.log("removeFromDOM()");
     this.wrapper.remove();
     this._destroy();
   }

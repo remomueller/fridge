@@ -151,7 +151,7 @@ Cube.prototype = {
   redrawCubeType: function() {
     // console.log("redrawCubeType()");
     var cube_type = this.wrapper.querySelector(".cube-type");
-    cube_type.replaceWith(this._template_cube_type(this.cubeType));
+    cube_type.replaceWith(Cube._template_cube_type(this.cubeType));
   },
 
   appendCube: function(text) {
