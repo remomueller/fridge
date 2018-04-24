@@ -1,8 +1,32 @@
+Cube.prototype._save_done = function(request, event_type) {
+  var data = JSON.parse(request.responseText);
+  if (data != null) {
+    this.positionOriginal = data.position;
+    this.id = data.id;
+    this.textOriginal = data.text;
+    this.text = data.text;
+    this.saving = "false";
+    this.redraw();
+    if (event_type == "blur") saveCubePositions();
+    if (event_type == "paste") {
+      this.faces.forEach(function(face) {
+        saveFace(face.input, event_type);
+      });
+      saveFacePositions(this.wrapper); // TODO: Refactor to: this.saveFacePositions(); and check if this is needed.
+    }
+  }
+};
+
+Cube.prototype._save_fail = function(request) {
+  this.saving = "false";
+  console.error(request);
+};
+
 Cube.prototype.save = function(event_type) {
   if (this.unchanged()) return;
   if (this.saving) return;
   if (this.destroyed) return;
-  console.log("cube.save()");
+  // console.log("cube.save()");
   this.saving = "true";
   var params = {};
   params.cube = {};
@@ -26,25 +50,9 @@ Cube.prototype.save = function(event_type) {
   var that = this;
   request.onreadystatechange = function() {
     if (this.readyState == 4 && this.status >= 200 && this.status < 300) {
-      var data = JSON.parse(request.responseText);
-      if (data != null) {
-        that.positionOriginal = data.position;
-        that.id = data.id;
-        that.textOriginal = data.text;
-        that.text = data.text;
-        that.saving = "false";
-        that.redraw();
-        if (event_type == "blur") saveCubePositions();
-        if (event_type == "paste") {
-          that.faces.forEach(function(face) {
-            saveFace(face.input, event_type);
-          });
-          saveFacePositions(that.wrapper); // TODO: Refactor to: that.saveFacePositions(); and check if this is needed.
-        }
-      }
+      that._save_done(request, event_type);
     } else if (this.readyState == 4) {
-      that.saving = "false";
-      console.error(request);
+      that._save_fail(request);
     }
   };
   request.send(serializeForXMLHttpRequest(params));
