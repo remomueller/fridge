@@ -131,11 +131,6 @@ Face.prototype = {
     }
   },
 
-  // TODO: Implement
-  _template: function(text) {
-    return null;
-  },
-
   appendFace: function(text) {
     if (text == null) text = "";
     var element = this._template(text);

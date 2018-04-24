@@ -33,7 +33,7 @@ $(document)
         cube.cubeType = data.cube_type
         cube.redrawCubeType()
         if cube.hasFaces() && cube.faces.length == 0
-          appendNewFaceToCubeWrapper(cube.wrapper) # TODO: Replace function
+          cube.appendNewFaceToCubeWrapper()
     ).fail((data) ->
       console.log "fail: #{data}"
     )

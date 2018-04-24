@@ -134,7 +134,7 @@ $(document)
     $("#output").text e.which
     if e.which == 13 && hasCubeFaces(wrapper)
       if $(wrapper).find("[data-object~=face-wrapper]").length == 0
-        appendNewFaceToCubeWrapper(wrapper)
+        thisCube.appendNewFaceToCubeWrapper()
       faceChildFirst(wrapper)
     else if e.which == 13
       tray.appendCube(this)

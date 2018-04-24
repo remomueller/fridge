@@ -63,29 +63,6 @@
 @faceWrapper = (element) ->
   wrapper = $(element).closest("[data-object~=face-wrapper]")
 
-@faceTemplateHelper = (tray, cube, url, position = 1, text = "") ->
-  console.log "Face CUBE: #{cube}"
-  console.log "Face URL: #{url}"
-  face_prepend = $("<div>"
-    class: "face-prepend"
-  ).append("-")
-  face_input = $("<input>"
-    class: "face-input"
-    placeholder: $("#language").data("enter-option-placeholder")
-    type: "text"
-    value: text
-  )
-  face_id = $("<div>"
-    class: "face-id"
-  ).append("#{position}")
-  $("<div>"
-    class: "face-wrapper face-wrapper-unsaved"
-    "data-object": "face-wrapper"
-    "data-cube": cube
-    "data-url": url
-    "data-position": position
-  ).append(face_prepend).append(face_input).append(face_id)
-
 @saveFacePositions = (cube_wrapper) ->
   console.log "saveFacePositions()"
   url = ""
@@ -140,11 +117,6 @@
   else
     # TODO: change how face positions are saved (refactor)
     saveFacePositions(face.cube.wrapper) # Always save face positions
-
-@appendNewFaceToCubeWrapper = (wrapper, position = 1, text = "") ->
-  newElement = faceTemplateHelper($(wrapper).data("tray"), $(wrapper).data("cube"), "#{$(wrapper).data("url")}/#{$(wrapper).data("cube")}/faces", position, text) ## similar to appendNewFAce
-  $(wrapper).find(".cube-faces").append(newElement)
-
 
 @updateFacePositions = (wrapper, position = parseInt($(wrapper).attr("data-position"))) ->
   $.each($(wrapper).nextAll("[data-object=face-wrapper]"), (index, w) ->

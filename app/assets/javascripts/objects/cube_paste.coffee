@@ -34,7 +34,7 @@
         cube.cubeType = "choice"
         cube.redrawCubeType()
       facePosition += 1
-      appendNewFaceToCubeWrapper(cube.wrapper, facePosition, $.trim(text.slice(1)))
+      cube.appendNewFaceToCubeWrapper($.trim(text.slice(1)), facePosition)
     else
       nextElement = tray.appendCube(nextElement, text)
       facePosition = 0

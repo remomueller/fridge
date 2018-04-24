@@ -170,8 +170,22 @@ Cube.prototype = {
     return node;
   },
 
+  appendNewFaceToCubeWrapper: function(text, position) {
+    if (text == null) text = "";
+    if (position == null) position = 1;
+    // console.log("cube.appendNewFaceToCubeWrapper();");
+    var newElement = Face._template(
+      text,
+      position,
+      this.url + "/" + this.id + "/faces",
+      this.wrapper.getAttribute("data-tray"),
+      this.id
+    );
+    this.wrapper.querySelector(".cube-faces").appendChild(newElement)
+  },
+
   updateFacePositions: function(start) {
-    console.log("cube.updateFacePositions();")
+    console.log("cube.updateFacePositions();");
     if (start == null) start = 0;
     this.faces.slice(start).forEach(function(face, index) {
       face.position = start + index + 1;
