@@ -1,4 +1,4 @@
-Cube.prototype._save_done = function(request, event_type) {
+Face.prototype._save_done = function(request, event_type) {
   var data = JSON.parse(request.responseText);
   if (data != null) {
     this.positionOriginal = data.position;
@@ -7,38 +7,34 @@ Cube.prototype._save_done = function(request, event_type) {
     this.text = data.text;
     this.saving = "false";
     this.redraw();
-    if (event_type == "blur") saveCubePositions(); // TODO: Refactor function.
-    if (event_type == "paste") {
-      this.faces.forEach(function(face) {
-        face.save(event_type);
-      });
-      saveFacePositions(this.wrapper); // TODO: Refactor to: this.saveFacePositions(); and check if this is needed.
-    }
+    if (event_type == "blur") saveFacePositions(this.cube.wrapper);
   }
 };
 
-Cube.prototype._save_fail = function(request) {
+Face.prototype._save_fail = function(request) {
   this.saving = "false";
   console.error(request);
 };
 
-Cube.prototype.save = function(event_type) {
+Face.prototype.save = function(event_type) {
   if (this.unchanged()) return;
   if (this.saving) return;
   if (this.destroyed) return;
-  // console.log("cube.save()");
+  // console.log("face.save()");
   this.saving = "true";
   var params = {};
-  params.cube = {};
-  params.cube.position = this.position;
-  params.cube.text = this.text;
-  params.cube.cube_type = this.cubeType;
-  var url = this.url;
+  params.face = {};
+  params.face.position = this.position;
+  params.face.text = this.text;
+
+  var url = this.cube.url; // TODO: Refactor how URLs are generated.
+  if (this.cube.id != null) {
+    url += "/" + this.cube.id + "/faces";
+  }
   if (this.id != null) {
     url += "/" + this.id;
     params._method = "patch";
   }
-  // console.log(params);
 
   var request = new XMLHttpRequest();
   request.open("POST", url, true);

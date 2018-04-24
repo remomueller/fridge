@@ -14,49 +14,6 @@
     )
   )
 
-@saveFace = (element, event_type) ->
-  # console.log "event_type: \"#{event_type}\""
-  cube = new Cube(element)
-  face = new Face(element, cube)
-  return if face.unchanged()
-  return if face.saving
-  return if face.destroyed
-  console.log "saveFace()"
-  face.saving = "true"
-  params = {}
-  params.face = {}
-  params.face.position = face.position
-  params.face.text = face.text
-
-  url = cube.url
-  console.log "url(1): #{url}"
-  if cube.id?
-    url += "/#{cube.id}/faces"
-  console.log "url(2): #{url}"
-  if face.id?
-    url += "/#{face.id}"
-    params._method = "patch"
-  console.log "url(3): #{url}"
-
-  $.post(
-    url
-    params
-    null
-    "json"
-  ).done((data) ->
-    if data?
-      face.positionOriginal = data.position
-      face.id = data.id
-      face.textOriginal = data.text
-      face.text = data.text
-      face.saving = "false"
-      face.redraw()
-      saveFacePositions(cube.wrapper) if event_type == "blur"
-  ).fail((data) ->
-    face.saving = "false"
-    console.log "fail: #{data}"
-  )
-
 @faceWrappers = (element) ->
   $(element).find("[data-object~=face-wrapper]")
 
@@ -221,5 +178,7 @@ $(document)
     face.redrawText()
   )
   .on("blur", "[data-object=face-wrapper] .face-input", (e) ->
-    saveFace(this, "blur")
+    cube = new Cube(this)
+    face = new Face(this, cube)
+    face.save("blur")
   )

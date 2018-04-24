@@ -138,10 +138,6 @@ Face.prototype = {
     return element; // TODO: Make this return a face object.
   },
 
-  save: function() {
-    console.log("face.save();");
-  },
-
   changed: function() {
     return (this._positionChanged() || this._textChanged());
   },
