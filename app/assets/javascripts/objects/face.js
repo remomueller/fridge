@@ -3,7 +3,7 @@
 function Face(element, cube) {
   this.wrapper = this._getWrapper(element);
   this.input = this.wrapper ? this.wrapper.querySelector(".face-input") : null;
-  this.cube = cube;
+  this.cube = (cube == null ? new Cube(element) : cube);
 }
 
 Face.prototype = {

@@ -164,7 +164,7 @@ Cube.prototype = {
   appendFace: function(element, text) {
     if (text == null) text = "";
     console.log("cube.appendFace();");
-    var face = new Face(element);
+    var face = new Face(element, this);
     var node = face.appendFace(text);
     this.updateFacePositions(face.position);
     return node;

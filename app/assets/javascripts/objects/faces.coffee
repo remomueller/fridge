@@ -109,13 +109,11 @@
   removeFace(face) if face.text == ""
 
 @facePrev = (element) ->
-  cube = new Cube(element)
-  face = new Face(element, cube)
+  face = new Face(element)
   faceSetFocusEnd(face.prevFace)
 
 @faceNext = (element) ->
-  cube = new Cube(element)
-  face = new Face(element, cube)
+  face = new Face(element)
   faceSetFocusEnd(face.nextFace)
 
 @faceChildFirst = (cube_wrapper) ->
@@ -133,11 +131,8 @@
 $(document)
   .on("keydown", "[data-object=face-wrapper] .face-input", (e) ->
     tray = new Tray
-    wrapper = faceWrapper(this)
-
-    thisCube = new Cube(this) # TODO: Cleanup
-    thisFace = new Face(this, thisCube) # TODO, make cube optional?
-
+    wrapper = faceWrapper(this) # TODO: Remove "wrapper" and use face object instead.
+    thisFace = new Face(this)
     $("#output").text e.which
     if e.which == 13
       if $(this).val() == "" && $(wrapper).next("[data-object=face-wrapper]").length == 0
@@ -146,7 +141,7 @@ $(document)
         cubeNext(this)
         removeFace(thisFace) unless $(wrapper).prev("[data-object=face-wrapper]").length == 0
       else
-        thisCube.appendFace(this)
+        thisFace.cube.appendFace(this)
         faceNext(this)
       e.preventDefault()
     else if e.which == 8 && $(wrapper).prev("[data-object=face-wrapper]").length > 0 && $(this).getCursorPosition() == 0 && nothingSelected($(this)) && $(this).val() == ""
@@ -173,12 +168,10 @@ $(document)
       e.preventDefault()
   )
   .on("keyup", "[data-object=face-wrapper] .face-input", (e) ->
-    cube = new Cube(this)
-    face = new Face(this, cube)
+    face = new Face(this)
     face.redrawText()
   )
   .on("blur", "[data-object=face-wrapper] .face-input", (e) ->
-    cube = new Cube(this)
-    face = new Face(this, cube)
+    face = new Face(this)
     face.save("blur")
   )
