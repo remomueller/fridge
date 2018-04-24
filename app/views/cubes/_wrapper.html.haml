@@ -3,7 +3,7 @@
   .cube
     = text_field_tag :cube, cube.text, placeholder: enter_question_placeholder, class: "cube-input", id: nil
     .cube-type
-      %small= link_to cube.cube_type.presence || "string", "#", data: { object: "cube-details-clicker" }
+      %small= link_to cube.cube_type.presence || "string", "#", data: { object: "cube-details-clicker" }, tabindex: "-1"
     .cube-id
       %small= "##{cube.id.presence || "Ø"}"
       = cube.position.presence || "Ø"

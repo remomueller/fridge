@@ -15,6 +15,7 @@ Cube.prototype._template_cube_type = function(type) {
   var cube_type_link_text = document.createTextNode(type);
   cube_type_link.setAttribute("data-object", "cube-details-clicker");
   cube_type_link.setAttribute("href", "#");
+  cube_type_link.setAttribute("tabindex", "-1");
   cube_type_link.appendChild(cube_type_link_text);
   small_link.appendChild(cube_type_link);
   var cube_type = document.createElement("DIV");
