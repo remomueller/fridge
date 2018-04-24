@@ -15,7 +15,7 @@
   )
 
 @saveFace = (element, event_type) ->
-  console.log "event_type: \"#{event_type}\""
+  # console.log "event_type: \"#{event_type}\""
   cube = new Cube(element)
   face = new Face(element, cube)
   return if face.unchanged()
@@ -86,14 +86,6 @@
     "data-position": position
   ).append(face_prepend).append(face_input).append(face_id)
 
-@faceTemplate = (element, text) ->
-  wrapper = faceWrapper(element)
-  position = parseInt($(wrapper).attr("data-position")) + 1
-  tray = $(wrapper).data("tray")
-  cube = $(wrapper).data("cube")
-  url = $(wrapper).data("url")
-  faceTemplateHelper(tray, cube, url, position, text)
-
 @saveFacePositions = (cube_wrapper) ->
   console.log "saveFacePositions()"
   url = ""
@@ -148,14 +140,6 @@
   else
     # TODO: change how face positions are saved (refactor)
     saveFacePositions(face.cube.wrapper) # Always save face positions
-
-@appendNewFace = (element, text = "") ->
-  # console.log "appendNewFace"
-  wrapper = faceWrapper(element)
-  newElement = faceTemplate(element, text)
-  $(wrapper).after(newElement)
-  updateFacePositions(wrapper)
-  $(wrapper).next("[data-object=face-wrapper]")
 
 @appendNewFaceToCubeWrapper = (wrapper, position = 1, text = "") ->
   newElement = faceTemplateHelper($(wrapper).data("tray"), $(wrapper).data("cube"), "#{$(wrapper).data("url")}/#{$(wrapper).data("cube")}/faces", position, text) ## similar to appendNewFAce
@@ -233,7 +217,7 @@ $(document)
         cubeNext(this)
         removeFace(thisFace) unless $(wrapper).prev("[data-object=face-wrapper]").length == 0
       else
-        appendNewFace(this)
+        thisCube.appendFace(this)
         faceNext(this)
       e.preventDefault()
     else if e.which == 8 && $(wrapper).prev("[data-object=face-wrapper]").length > 0 && $(this).getCursorPosition() == 0 && nothingSelected($(this)) && $(this).val() == ""

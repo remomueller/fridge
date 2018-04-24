@@ -140,7 +140,7 @@ Face.prototype = {
     if (text == null) text = "";
     var element = this._template(text);
     this.wrapper.insertAfter(element);
-    return element; // TODO: Make this return a cube object.
+    return element; // TODO: Make this return a face object.
   },
 
   save: function() {

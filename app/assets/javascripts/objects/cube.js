@@ -161,6 +161,24 @@ Cube.prototype = {
     return element; // TODO: Make this return a cube object.
   },
 
+  appendFace: function(element, text) {
+    if (text == null) text = "";
+    console.log("cube.appendFace();");
+    var face = new Face(element);
+    var node = face.appendFace(text);
+    this.updateFacePositions(face.position);
+    return node;
+  },
+
+  updateFacePositions: function(start) {
+    console.log("cube.updateFacePositions();")
+    if (start == null) start = 0;
+    this.faces.slice(start).forEach(function(face, index) {
+      face.position = start + index + 1;
+      face.redrawPosition();
+    });
+  },
+
   changed: function() {
     return (this._positionChanged() || this._textChanged());
   },

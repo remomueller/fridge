@@ -35,10 +35,11 @@ Cube.prototype._template_cube_info = function() {
   return cube_info;
 };
 
-Cube.prototype._template_cube_div = function(text) {
+Cube.prototype._template_cube_div = function(text, type) {
   if (text == null) text = "";
+  if (type == null) type = "string";
   var cube_input = this._template_cube_input(text);
-  var cube_type = this._template_cube_type();
+  var cube_type = this._template_cube_type(type);
   var cube_info = this._template_cube_info();
 
   var cube_div = document.createElement("DIV");
@@ -55,10 +56,11 @@ Cube.prototype._template_cube_faces = function() {
   return cube_faces;
 };
 
-Cube.prototype._template = function(text) {
+Cube.prototype._template = function(text, type) {
   if (text == null) text = "";
+  if (type == null) type = "string";
 
-  var cube_div = this._template_cube_div(text);
+  var cube_div = this._template_cube_div(text, type);
   var cube_faces = this._template_cube_faces();
 
   var element = document.createElement("DIV");
@@ -68,6 +70,7 @@ Cube.prototype._template = function(text) {
   element.setAttribute("data-tray", this.wrapper.getAttribute("data-tray")); // TODO: Remove?
   element.setAttribute("data-url", this.wrapper.getAttribute("data-url"));
   element.setAttribute("data-position", this.position + 1);
+  element.setAttribute("data-cube-type", type);
   element.appendChild(cube_div);
   element.appendChild(cube_faces);
   return element;
