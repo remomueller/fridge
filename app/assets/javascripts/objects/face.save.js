@@ -1,6 +1,6 @@
 "use strict";
 
-Face.prototype._save_done = function(request, event_type) {
+Face.prototype._saveDone = function(request, event_type) {
   var data = JSON.parse(request.responseText);
   if (data != null) {
     this.positionOriginal = data.position;
@@ -13,7 +13,7 @@ Face.prototype._save_done = function(request, event_type) {
   }
 };
 
-Face.prototype._save_fail = function(request) {
+Face.prototype._saveFail = function(request) {
   this.saving = "false";
   console.error(request);
 };
@@ -48,9 +48,9 @@ Face.prototype.save = function(event_type) {
   var that = this;
   request.onreadystatechange = function() {
     if (this.readyState == 4 && this.status >= 200 && this.status < 300) {
-      that._save_done(request, event_type);
+      that._saveDone(request, event_type);
     } else if (this.readyState == 4) {
-      that._save_fail(request);
+      that._saveFail(request);
     }
   };
   request.send(serializeForXMLHttpRequest(params));

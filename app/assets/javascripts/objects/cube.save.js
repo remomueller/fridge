@@ -1,6 +1,6 @@
 "use strict";
 
-Cube.prototype._save_done = function(request, event_type) {
+Cube.prototype._saveDone = function(request, event_type) {
   var data = JSON.parse(request.responseText);
   if (data != null) {
     this.positionOriginal = data.position;
@@ -9,7 +9,10 @@ Cube.prototype._save_done = function(request, event_type) {
     this.text = data.text;
     this.saving = "false";
     this.redraw();
-    if (event_type == "blur") saveCubePositions(); // TODO: Refactor function.
+    if (event_type == "blur") {
+      var tray = new Tray;
+      tray.saveCubePositions();
+    }
     if (event_type == "paste") {
       this.faces.forEach(function(face) {
         face.save(event_type);
@@ -19,7 +22,7 @@ Cube.prototype._save_done = function(request, event_type) {
   }
 };
 
-Cube.prototype._save_fail = function(request) {
+Cube.prototype._saveFail = function(request) {
   this.saving = "false";
   console.error(request);
 };
@@ -52,9 +55,9 @@ Cube.prototype.save = function(event_type) {
   var that = this;
   request.onreadystatechange = function() {
     if (this.readyState == 4 && this.status >= 200 && this.status < 300) {
-      that._save_done(request, event_type);
+      that._saveDone(request, event_type);
     } else if (this.readyState == 4) {
-      that._save_fail(request);
+      that._saveFail(request);
     }
   };
   request.send(serializeForXMLHttpRequest(params));

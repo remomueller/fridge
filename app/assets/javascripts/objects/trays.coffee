@@ -1,46 +1,3 @@
-@saveCubePositions = ->
-  tray = new Tray
-
-  console.log "saveCubePositions()"
-  url = ""
-  params = {}
-  params.cubes = {}
-
-  $.each(tray.cubes, (index, cube) ->
-    return true unless cube._positionChanged() # TODO: Change calling of "private" method?
-    url = "#{cube.url}/positions" # TODO: Change to "tray.url"? currently is "/trays/1/cubes/positions.json"
-    params.cubes["#{cube.id}"] = (
-      "position": cube.position
-    )
-  )
-
-  console.log params
-  # console.log "url: #{url}"
-  return unless !!url
-  # console.log "server save positions"
-  # console.log params
-  $.post(
-    url
-    params
-    null
-    "json"
-  ).done((data) ->
-    if data?
-      $.each(data, (index, servercube) ->
-        element = document.querySelector("[data-object~=\"cube-wrapper\"][data-cube=\"#{servercube.id}\"]")
-        cube = new Cube(element)
-        if cube.wrapper
-          cube.positionOriginal = servercube.position
-          cube.redrawPosition()
-        else
-          console.log "Cube ##{servercube.id} not found."
-      )
-      # console.log "saveCubePositions: DONE"
-  ).fail((data) ->
-    console.log "saveCubePositions: FAIL"
-    console.log "#{data}"
-  )
-
 @destroyCube = (cube) ->
   console.log "destroyCube(cube);"
   cube.destroyed = "true"
@@ -62,7 +19,7 @@
   cube.removeFromDOM()
   tray = new Tray
   tray.updateCubePositions(position - 1) # Needs to be done after cube is removed from DOM
-  saveCubePositions()
+  tray.saveCubePositions()
 
 @cubePrevAndDelete = (cube) ->
   cube.destroyed = "true" # Make sure cube isn't saved on input blur.
