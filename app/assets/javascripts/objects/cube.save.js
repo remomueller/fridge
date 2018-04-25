@@ -1,3 +1,5 @@
+"use strict";
+
 Cube.prototype._save_done = function(request, event_type) {
   var data = JSON.parse(request.responseText);
   if (data != null) {

@@ -1,3 +1,5 @@
+"use strict";
+
 Face._template_face_prepend = function(text) {
   var text_dash = document.createTextNode("-");
   var face_prepend = document.createElement("DIV");

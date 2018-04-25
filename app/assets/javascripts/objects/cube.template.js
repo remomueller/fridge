@@ -1,3 +1,5 @@
+"use strict";
+
 Cube._template_cube_input = function(text) {
   var cube_input = document.createElement("INPUT");
   cube_input.classList.add("cube-input");

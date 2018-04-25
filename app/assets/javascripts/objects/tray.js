@@ -24,6 +24,7 @@ Tray.prototype = {
 
   updateCubePositions: function(start) {
     if (start == null) start = 0;
+    // console.log("tray.updateCubePositions(" + start + ")");
     this.cubes.slice(start).forEach(function(cube, index) {
       cube.position = start + index + 1;
       cube.redrawPosition();

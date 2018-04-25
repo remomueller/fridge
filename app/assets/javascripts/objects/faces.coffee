@@ -116,11 +116,13 @@
   face = new Face(element)
   faceSetFocusEnd(face.nextFace)
 
-@faceChildFirst = (cube_wrapper) ->
-  setFocusEnd($(cube_wrapper).find("[data-object~=face-wrapper]").first().find(".face-input"))
+@faceChildFirst = (cube) ->
+  face = cube.faces[0]
+  setFocusEnd(face.input) if face && face.input
 
-@faceChildLast = (cube_wrapper) ->
-  setFocusEnd($(cube_wrapper).find("[data-object~=face-wrapper]").last().find(".face-input"))
+@faceChildLast = (cube) ->
+  face = cube.faces[cube.faces.length - 1]
+  setFocusEnd(face.input) if face && face.input
 
 @faceSetFocusEnd = (face) -> # Could be refactored to work for cubes and faces
   setFocusEnd(face.input) if face && face.input
@@ -144,11 +146,10 @@ $(document)
         thisFace.cube.appendFace(this)
         faceNext(this)
       e.preventDefault()
-    else if e.which == 8 && $(wrapper).prev("[data-object=face-wrapper]").length > 0 && $(this).getCursorPosition() == 0 && nothingSelected($(this)) && $(this).val() == ""
-
+    else if e.which == 8 && $(wrapper).prev("[data-object=face-wrapper]").length > 0 && $(this).getCursorPosition() == 0 && nothingSelected(this) && $(this).val() == ""
       facePrevAndDelete(thisFace)
       e.preventDefault()
-    else if e.which == 46 && $(wrapper).next("[data-object=face-wrapper]").length > 0 && $(this).getCursorPosition() == 0 && nothingSelected($(this)) && $(this).val() == ""
+    else if e.which == 46 && $(wrapper).next("[data-object=face-wrapper]").length > 0 && $(this).getCursorPosition() == 0 && nothingSelected(this) && $(this).val() == ""
       faceNextAndDelete(thisFace)
       e.preventDefault()
     else if e.which == 38
