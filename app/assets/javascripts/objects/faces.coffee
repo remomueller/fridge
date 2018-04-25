@@ -1,62 +1,17 @@
 @facesReady = ->
-  $.each($(".cube-faces"), ->
-    $this = $(this)
-    $this.sortable(
-      axis: "y"
-      forcePlaceholderSize: true
-      handle: ".face-id"
-      placeholder: "face-wrapper-placeholder"
-      stop: (event, ui) ->
-        wrapper = faceWrappers($this).first()
-        if wrapper
-          updateFacePosition(wrapper, 1)
-          updateFacePositions(wrapper)
-    )
-  )
-
-@faceWrappers = (element) ->
-  $(element).find("[data-object~=face-wrapper]")
-
-@faceWrapper = (element) ->
-  wrapper = $(element).closest("[data-object~=face-wrapper]")
-
-@saveFacePositions = (cube_wrapper) ->
-  console.log "saveFacePositions()"
-  url = ""
-  params = {}
-  params.faces = {}
-  $.each(faceWrappers(cube_wrapper), (index, face_wrapper) ->
-    return true if $(face_wrapper).attr("data-position") == $(face_wrapper).attr("data-position-original")
-    url = "#{$(face_wrapper).data("url")}/positions"
-    params.faces["#{$(face_wrapper).data("face")}"] = (
-      "position": $(face_wrapper).attr("data-position")
-    )
-  )
-  # console.log params
-  return unless !!url
-  $.post(
-    url
-    params
-    null
-    "json"
-  ).done((data) ->
-    if data?
-      $.each(data, (index, face) ->
-        face_wrapper = $("[data-object~=face-wrapper][data-face=#{face.id}]")
-        if $(face_wrapper).length > 0
-          $(face_wrapper).attr("data-position-original", parseInt(face.position))
-          redrawFacePosition(face_wrapper)
-        else
-          console.log "NO WRAPPER FOUND for \"#{face.id}\""
-      )
-      # console.log "saveFacePositions: DONE"
-  ).fail((data) ->
-    console.log "saveFacePositions: FAIL"
-    console.log "#{data}"
+  $(".cube-faces").sortable(
+    axis: "y"
+    forcePlaceholderSize: true
+    handle: ".face-id"
+    placeholder: "face-wrapper-placeholder"
+    stop: (event, ui) ->
+      console.log "facesReady() -> stop -> face.cube.updateFacePositions"
+      cube = new Cube(ui.item[0])
+      cube.updateFacePositions()
   )
 
 @destroyFace = (face) ->
-  # console.log "destroyFace"
+  console.log "destroyFace(face)"
   face.destroyed = "true"
   if !!face.id
     params = {}
@@ -67,36 +22,16 @@
       params
       null
       "json"
-    ).done((data) ->
-      # TODO: change how face positions are saved (refactor)
-      saveFacePositions(face.cube.wrapper) # Wait for completion
     )
-  else
-    # TODO: change how face positions are saved (refactor)
-    saveFacePositions(face.cube.wrapper) # Always save face positions
-
-@updateFacePositions = (wrapper, position = parseInt($(wrapper).attr("data-position"))) ->
-  $.each($(wrapper).nextAll("[data-object=face-wrapper]"), (index, w) ->
-    position += 1
-    updateFacePosition(w, position)
-  )
-
-@updateFacePosition = (wrapper, position) ->
-  $(wrapper).attr("data-position", position)
-  redrawFacePosition(wrapper)
-
-@redrawFacePosition = (wrapper) ->
-  $(wrapper).find(".face-id").html("#{$(wrapper).attr("data-position")}")
-  if $(wrapper).attr("data-position") != $(wrapper).attr("data-position-original")
-    $(wrapper).addClass("face-wrapper-unsaved-position")
-  else
-    $(wrapper).removeClass("face-wrapper-unsaved-position")
 
 @removeFace = (face) ->
   return unless face.text == ""
-  updateFacePositions(face.wrapper, face.position - 1)
+  position = face.position - 1 # Needs to be stored before face is destroyed/removed.
+  cube = face.cube
   destroyFace(face)
   face.removeFromDOM()
+  cube.updateFacePositions(position) # Needs to be done after cube is removed from DOM
+  cube.saveFacePositions()
 
 @facePrevAndDelete = (face) ->
   face.destroyed = "true" # Make sure face isn't saved on input blur.
@@ -108,11 +43,7 @@
   faceSetFocusStart(face.nextFace)
   removeFace(face) if face.text == ""
 
-@facePrev = (element) ->
-  face = new Face(element)
-  faceSetFocusEnd(face.prevFace)
-
-@faceNext = (element) ->
+@faceNext = (element) -> # TODO: Remove this function
   face = new Face(element)
   faceSetFocusEnd(face.nextFace)
 
@@ -133,37 +64,38 @@
 $(document)
   .on("keydown", "[data-object=face-wrapper] .face-input", (e) ->
     tray = new Tray
-    wrapper = faceWrapper(this) # TODO: Remove "wrapper" and use face object instead.
     thisFace = new Face(this)
+    prevFace = thisFace.prevFace
+    nextFace = thisFace.nextFace
+
     $("#output").text e.which
     if e.which == 13
-      if $(this).val() == "" && $(wrapper).next("[data-object=face-wrapper]").length == 0
-        $(wrapper).data("destroyed", true) unless $(wrapper).prev("[data-object=face-wrapper]").length == 0
+      if $(this).val() == "" && !nextFace
+        thisFace.destroyed = "true" if prevFace # TODO: Needs to actually be destroyed as well if it already exists.
         tray.appendCube(this)
         cubeNext(this)
-        removeFace(thisFace) unless $(wrapper).prev("[data-object=face-wrapper]").length == 0
+        removeFace(thisFace) if prevFace
       else
         thisFace.cube.appendFace(this)
         faceNext(this)
       e.preventDefault()
-    else if e.which == 8 && $(wrapper).prev("[data-object=face-wrapper]").length > 0 && $(this).getCursorPosition() == 0 && nothingSelected(this) && $(this).val() == ""
+    else if e.which == 8 && prevFace && $(this).getCursorPosition() == 0 && nothingSelected(this) && $(this).val() == ""
       facePrevAndDelete(thisFace)
       e.preventDefault()
-    else if e.which == 46 && $(wrapper).next("[data-object=face-wrapper]").length > 0 && $(this).getCursorPosition() == 0 && nothingSelected(this) && $(this).val() == ""
+    else if e.which == 46 && nextFace && $(this).getCursorPosition() == 0 && nothingSelected(this) && $(this).val() == ""
       faceNextAndDelete(thisFace)
       e.preventDefault()
     else if e.which == 38
-      if $(wrapper).prev("[data-object=face-wrapper]").length > 0
-        facePrev(this)
+      if prevFace
+        faceSetFocusEnd(prevFace)
       else
-        cubeParent(this)
+        cubeSetFocusEnd(thisFace.cube)
       e.preventDefault()
-    else if e.which == 40 && $(wrapper).next("[data-object=face-wrapper]").length > 0
-      faceNext(this)
+    else if e.which == 40 && nextFace
+      faceSetFocusEnd(nextFace)
       e.preventDefault()
-    else if e.which == 40 && $(this).closest("[data-object=cube-wrapper]").next("[data-object=cube-wrapper]").length > 0
-      next_cube_wrapper = $(this).closest("[data-object=cube-wrapper]").next("[data-object=cube-wrapper]")
-      setFocusEnd(next_cube_wrapper.find(".cube-input"))
+    else if e.which == 40 && thisFace.cube.nextCube
+      cubeSetFocusEnd(thisFace.cube.nextCube)
     else if e.which == 66 && e.metaKey
       boldSelection(this)
       e.preventDefault()

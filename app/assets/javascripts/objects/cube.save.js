@@ -17,7 +17,7 @@ Cube.prototype._saveDone = function(request, event_type) {
       this.faces.forEach(function(face) {
         face.save(event_type);
       });
-      saveFacePositions(this.wrapper); // TODO: Refactor to: this.saveFacePositions(); and check if this is needed.
+      this.saveFacePositions(); // TODO: Check if saveFacePositions is needed here.
     }
   }
 };
@@ -61,4 +61,62 @@ Cube.prototype.save = function(event_type) {
     }
   };
   request.send(serializeForXMLHttpRequest(params));
+};
+
+
+Cube.prototype.saveFacePositions = function() {
+  console.log("cube.saveFacePositions();");
+  var url = "";
+  var changes = false;
+  var params = {};
+  params.faces = {};
+
+  url = this.url + "/" + this.id + "/" + "faces/positions";
+
+  this.faces.forEach(function(face, index) {
+    if (!face._positionChanged()) return true; // TODO: Change calling of "private" method?
+    params.faces[face.id] = { "position": face.position };
+    changes = true;
+  });
+
+  console.log(params);
+  if (!changes) return;
+
+  // TODO: Refactor "request" generation including passing in variables and functions.
+  var request = new XMLHttpRequest();
+  request.open("POST", url, true);
+  request.setRequestHeader("Accept", "application/json");
+  request.setRequestHeader("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
+  request.setRequestHeader("X-CSRF-Token", csrfToken());
+  // request.setRequestHeader("X-Requested-With", "XMLHttpRequest");
+
+  var that = this;
+  request.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status >= 200 && this.status < 300) {
+      that._saveFacePositionsDone(request);
+    } else if (this.readyState == 4) {
+      that._saveFacePositionsFail(request);
+    }
+  };
+  request.send(serializeForXMLHttpRequest(params));
+};
+
+Cube.prototype._saveFacePositionsDone = function(request) {
+  var data = JSON.parse(request.responseText);
+  if (data != null) {
+    data.forEach(function(datum) {
+      var element = document.querySelector("[data-object~=\"face-wrapper\"][data-face=\"" + datum.id + "\"]");
+      var face = new Face(element, this);
+      if (face.wrapper) {
+        face.positionOriginal = datum.position;
+        face.redrawPosition();
+      } else {
+        console.error("Face #" + datum.id + " not found.");
+      }
+    });
+  }
+};
+
+Cube.prototype._saveFacePositionsFail = function(request) {
+  console.error(request);
 };

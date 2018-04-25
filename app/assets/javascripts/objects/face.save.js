@@ -9,7 +9,7 @@ Face.prototype._saveDone = function(request, event_type) {
     this.text = data.text;
     this.saving = "false";
     this.redraw();
-    if (event_type == "blur") saveFacePositions(this.cube.wrapper);
+    if (event_type == "blur") this.cube.saveFacePositions(); // TODO: Check if saveFacePositions is needed here.
   }
 };
 

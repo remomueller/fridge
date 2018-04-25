@@ -38,7 +38,6 @@ Tray.prototype._saveCubePositionsDone = function(request) {
   var data = JSON.parse(request.responseText);
   if (data != null) {
     data.forEach(function(datum) {
-      var servercube = datum;
       var element = document.querySelector("[data-object~=\"cube-wrapper\"][data-cube=\"" + datum.id + "\"]");
       var cube = new Cube(element);
       if (cube.wrapper) {

@@ -18,7 +18,7 @@
   destroyCube(cube)
   cube.removeFromDOM()
   tray = new Tray
-  tray.updateCubePositions(position - 1) # Needs to be done after cube is removed from DOM
+  tray.updateCubePositions(position) # Needs to be done after cube is removed from DOM
   tray.saveCubePositions()
 
 @cubePrevAndDelete = (cube) ->
@@ -31,7 +31,7 @@
   cubeSetFocusStart(cube.nextCube)
   removeCube(cube) if cube.text == ""
 
-@cubeNext = (element) ->
+@cubeNext = (element) -> # TODO: Remove this function.
   cube = new Cube(element)
   cubeSetFocusEnd(cube.nextCube)
 
@@ -60,10 +60,10 @@ $(document)
       tray.appendCube(this)
       cubeNext(this)
       e.preventDefault()
-    else if e.which == 8 && prevCube && $(this).getCursorPosition() == 0 && nothingSelected($(this)) && $(this).val() == ""
+    else if e.which == 8 && prevCube && $(this).getCursorPosition() == 0 && nothingSelected(this) && $(this).val() == ""
       cubePrevAndDelete(thisCube)
       e.preventDefault()
-    else if e.which == 46 && nextCube && $(this).getCursorPosition() == 0 && nothingSelected($(this)) && $(this).val() == ""
+    else if e.which == 46 && nextCube && $(this).getCursorPosition() == 0 && nothingSelected(this) && $(this).val() == ""
       cubeNextAndDelete(thisCube)
       e.preventDefault()
     else if e.which == 38 && prevCube && prevCube.hasFaces() && prevCube.faces.length > 0

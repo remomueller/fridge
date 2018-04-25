@@ -90,20 +90,20 @@ Face.prototype = {
     this.wrapper.setAttribute("data-destroyed", val);
   },
 
-  // Returns next cube or null
+  // Returns next face or null
   get nextFace() {
     var next = new Face(this.wrapper.nextElementSibling, this.cube);
     return (next.wrapper ? next : null);
   },
 
-  // Returns prev cube or null
+  // Returns prev face or null
   get prevFace() {
     var prev = new Face(this.wrapper.previousElementSibling, this.cube);
     return (prev.wrapper ? prev : null);
   },
 
   // This function should draw all attributes to their visible locations and set
-  // the appropriate class/es for the cube.
+  // the appropriate class/es for the face.
   redraw: function() {
     // console.log("face.redraw()");
     this.redrawText();
