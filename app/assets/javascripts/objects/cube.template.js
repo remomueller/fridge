@@ -3,6 +3,7 @@
 Cube._template_cube_input = function(text) {
   var cube_input = document.createElement("INPUT");
   cube_input.classList.add("cube-input");
+  cube_input.setAttribute("autocomplete", "off");
   cube_input.setAttribute("placeholder", document.getElementById("language").getAttribute("data-enter-question-placeholder"));
   cube_input.setAttribute("type", "text");
   cube_input.setAttribute("value", text);

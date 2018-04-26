@@ -1,6 +1,8 @@
+
 @objectsReady = ->
   cubesReady()
   facesReady()
+  traysReady()
 
 @turbolinksReady = ->
   objectsReady()

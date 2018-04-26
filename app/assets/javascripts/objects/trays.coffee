@@ -45,51 +45,5 @@
 @cubeSetFocusStart = (cube) ->
   setFocusStart(cube.input) if cube && cube.input
 
-$(document)
-  .on("keydown", "[data-object=cube-wrapper] .cube-input", (e) ->
-    tray = new Tray
-    thisCube = new Cube(this)
-    prevCube = thisCube.prevCube
-    nextCube = thisCube.nextCube
-    $("#output").text e.which
-    if e.which == 13 && thisCube.hasFaces()
-      if thisCube.faces.length == 0
-        thisCube.appendNewFaceToCubeWrapper()
-      faceChildFirst(thisCube)
-    else if e.which == 13
-      tray.appendCube(this)
-      cubeNext(this)
-      e.preventDefault()
-    else if e.which == 8 && prevCube && $(this).getCursorPosition() == 0 && nothingSelected(this) && $(this).val() == ""
-      cubePrevAndDelete(thisCube)
-      e.preventDefault()
-    else if e.which == 46 && nextCube && $(this).getCursorPosition() == 0 && nothingSelected(this) && $(this).val() == ""
-      cubeNextAndDelete(thisCube)
-      e.preventDefault()
-    else if e.which == 38 && prevCube && prevCube.hasFaces() && prevCube.faces.length > 0
-      faceChildLast(prevCube)
-    else if e.which == 38 && prevCube
-      cubeSetFocusEnd(prevCube)
-      e.preventDefault()
-    else if e.which == 40 && thisCube.hasFaces() && thisCube.faces.length > 0
-      faceChildFirst(thisCube)
-      e.preventDefault()
-    else if e.which == 40 && nextCube
-      cubeSetFocusEnd(nextCube)
-      e.preventDefault()
-    else if e.which == 66 && e.metaKey
-      boldSelection(this)
-      e.preventDefault()
-  )
-  .on("keyup", "[data-object=cube-wrapper] .cube-input", (e) ->
-    cube = new Cube(this)
-    cube.redrawText() # Shouldn't need a full redraw.
-  )
-  .on("blur", "[data-object=cube-wrapper] .cube-input", (e) ->
-    cube = new Cube(this)
-    cube.save("blur")
-  )
-  .on("paste", "[data-object=cube-wrapper] .cube-input", (e) ->
-    cubePasteEvent(e)
-    # false
-  )
+@traysReady = ->
+  Tray.attachEventHandlers()

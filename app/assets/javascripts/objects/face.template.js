@@ -12,6 +12,7 @@ Face._template_face_input = function(text) {
   if (text == null) text = "";
   var face_input = document.createElement("INPUT");
   face_input.classList.add("face-input");
+  face_input.setAttribute("autocomplete", "off");
   face_input.setAttribute("placeholder", document.getElementById("language").getAttribute("data-enter-option-placeholder"));
   face_input.setAttribute("type", "text");
   face_input.setAttribute("value", text);

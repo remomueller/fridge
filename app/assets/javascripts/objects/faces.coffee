@@ -63,26 +63,26 @@
 
 $(document)
   .on("keydown", "[data-object=face-wrapper] .face-input", (e) ->
+    that = this # TODO: event.target
     tray = new Tray
-    thisFace = new Face(this)
+    thisFace = new Face(that)
     prevFace = thisFace.prevFace
     nextFace = thisFace.nextFace
-
-    $("#output").text e.which
+    document.getElementById("output").textContent = event.which
     if e.which == 13
-      if $(this).val() == "" && !nextFace
+      if thisFace.text == "" && !nextFace
         thisFace.destroyed = "true" if prevFace # TODO: Needs to actually be destroyed as well if it already exists.
-        tray.appendCube(this)
-        cubeNext(this)
+        tray.appendCube(that)
+        cubeNext(that)
         removeFace(thisFace) if prevFace
       else
-        thisFace.cube.appendFace(this)
-        faceNext(this)
+        thisFace.cube.appendFace(that)
+        faceNext(that)
       e.preventDefault()
-    else if e.which == 8 && prevFace && $(this).getCursorPosition() == 0 && nothingSelected(this) && $(this).val() == ""
+    else if e.which == 8 && prevFace && getCursorPosition(that) == 0 && nothingSelected(that) && thisFace.text == ""
       facePrevAndDelete(thisFace)
       e.preventDefault()
-    else if e.which == 46 && nextFace && $(this).getCursorPosition() == 0 && nothingSelected(this) && $(this).val() == ""
+    else if e.which == 46 && nextFace && getCursorPosition(that) == 0 && nothingSelected(that) && thisFace.text == ""
       faceNextAndDelete(thisFace)
       e.preventDefault()
     else if e.which == 38
@@ -97,7 +97,7 @@ $(document)
     else if e.which == 40 && thisFace.cube.nextCube
       cubeSetFocusEnd(thisFace.cube.nextCube)
     else if e.which == 66 && e.metaKey
-      boldSelection(this)
+      boldSelection(that)
       e.preventDefault()
   )
   .on("keyup", "[data-object=face-wrapper] .face-input", (e) ->
