@@ -150,5 +150,27 @@ Face.prototype = {
     // console.log("removeFromDOM()");
     this.wrapper.remove();
     this._destroy();
+  },
+
+  remove: function() {
+    if (this.text) return;
+    var position = this.position - 1; // Needs to be stored before face is destroyed/removed.
+    var cube = this.cube;
+    this.destroy();
+    this.removeFromDOM();
+    cube.updateFacePositions(position); // Needs to be done after face is removed from DOM.
+    cube.saveFacePositions();
+  },
+
+  focusPreviousAndDelete: function() {
+    this.destroyed = "true"; // Make sure face isn't saved on input blur.
+    faceSetFocusEnd(this.prevFace);
+    this.remove();
+  },
+
+  focusNextAndDelete: function() {
+    this.destroyed = "true"; // Make sure face isn't saved on input blur.
+    faceSetFocusStart(this.nextFace);
+    this.remove();
   }
 };

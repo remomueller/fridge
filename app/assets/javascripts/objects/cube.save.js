@@ -45,12 +45,10 @@ Cube.prototype.save = function(event_type) {
   }
   // console.log(params);
 
-  var request = new XMLHttpRequest();
-  request.open("POST", url, true);
-  request.setRequestHeader("Accept", "application/json");
-  request.setRequestHeader("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
-  request.setRequestHeader("X-CSRF-Token", csrfToken());
-  // request.setRequestHeader("X-Requested-With", "XMLHttpRequest");
+
+  // Fridge.post(url, params, this._saveDone, this._saveFail, event_type);
+
+  var request = Fridge._requestPost(url);
 
   var that = this;
   request.onreadystatechange = function() {
@@ -63,9 +61,20 @@ Cube.prototype.save = function(event_type) {
   request.send(serializeForXMLHttpRequest(params));
 };
 
+Cube.prototype.destroy = function() {
+  // console.log("cube.destroy();");
+  this.destroyed = "true";
+  if (!this.id) return;
+  var params = {};
+  params._method = "delete";
+  var url = this.url + "/" + this.id;
+
+  Fridge.post(url, params);
+};
+
 
 Cube.prototype.saveFacePositions = function() {
-  console.log("cube.saveFacePositions();");
+  // console.log("cube.saveFacePositions();");
   var url = "";
   var changes = false;
   var params = {};
@@ -82,23 +91,7 @@ Cube.prototype.saveFacePositions = function() {
   console.log(params);
   if (!changes) return;
 
-  // TODO: Refactor "request" generation including passing in variables and functions.
-  var request = new XMLHttpRequest();
-  request.open("POST", url, true);
-  request.setRequestHeader("Accept", "application/json");
-  request.setRequestHeader("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
-  request.setRequestHeader("X-CSRF-Token", csrfToken());
-  // request.setRequestHeader("X-Requested-With", "XMLHttpRequest");
-
-  var that = this;
-  request.onreadystatechange = function() {
-    if (this.readyState == 4 && this.status >= 200 && this.status < 300) {
-      that._saveFacePositionsDone(request);
-    } else if (this.readyState == 4) {
-      that._saveFacePositionsFail(request);
-    }
-  };
-  request.send(serializeForXMLHttpRequest(params));
+  Fridge.post(url, params, this._saveFacePositionsDone, this._saveFacePositionsFail);
 };
 
 Cube.prototype._saveFacePositionsDone = function(request) {

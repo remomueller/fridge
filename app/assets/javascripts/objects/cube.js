@@ -210,5 +210,37 @@ Cube.prototype = {
     // console.log("removeFromDOM()");
     this.wrapper.remove();
     this._destroy();
+  },
+
+  remove: function() {
+    if (this.text) return;
+    var position = this.position - 1; // Needs to be stored before cube is destroyed/removed.
+    this.destroy();
+    this.removeFromDOM();
+    var tray = new Tray();
+    tray.updateCubePositions(position); // Needs to be done after cube is removed from DOM.
+    tray.saveCubePositions();
+  },
+
+  focusPreviousAndDelete: function() {
+    this.destroyed = "true"; // Make sure cube isn't saved on input blur.
+    cubeSetFocusEnd(this.prevCube);
+    this.remove();
+  },
+
+  focusNextAndDelete: function() {
+    this.destroyed = "true"; // Make sure cube isn't saved on input blur.
+    cubeSetFocusStart(this.nextCube);
+    this.remove();
+  },
+
+  focusFirstChild: function() {
+    var face = this.faces[0];
+    if (face && face.input) setFocusEnd(face.input);
+  },
+
+  focusLastChild: function() {
+    var face = this.faces[this.faces.length - 1];
+    if (face && face.input) setFocusEnd(face.input);
   }
 };

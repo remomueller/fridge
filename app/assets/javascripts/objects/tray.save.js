@@ -1,7 +1,7 @@
 "use strict";
 
 Tray.prototype.saveCubePositions = function() {
-  console.log("tray.saveCubePositions();");
+  // console.log("tray.saveCubePositions();");
   var url = "";
   var params = {};
   params.cubes = {};
@@ -12,26 +12,10 @@ Tray.prototype.saveCubePositions = function() {
     params.cubes[cube.id] = { "position": cube.position };
   });
 
-  console.log(params);
+  // console.log(params);
   if (!url) return;
 
-  // TODO: Refactor "request" generation including passing in variables and functions.
-  var request = new XMLHttpRequest();
-  request.open("POST", url, true);
-  request.setRequestHeader("Accept", "application/json");
-  request.setRequestHeader("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
-  request.setRequestHeader("X-CSRF-Token", csrfToken());
-  // request.setRequestHeader("X-Requested-With", "XMLHttpRequest");
-
-  var that = this;
-  request.onreadystatechange = function() {
-    if (this.readyState == 4 && this.status >= 200 && this.status < 300) {
-      that._saveCubePositionsDone(request);
-    } else if (this.readyState == 4) {
-      that._saveCubePositionsFail(request);
-    }
-  };
-  request.send(serializeForXMLHttpRequest(params));
+  Fridge.post(url, params, this._saveCubePositionsDone, this._saveCubePositionsFail);
 };
 
 Tray.prototype._saveCubePositionsDone = function(request) {

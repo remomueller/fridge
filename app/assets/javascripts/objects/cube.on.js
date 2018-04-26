@@ -50,24 +50,24 @@ Cube._eventKeydown = function(event) {
   document.getElementById("output").textContent = event.which; // TODO: Remove key output.
   if (event.which == 13 && thisCube.hasFaces()) {
     if (thisCube.faces.length === 0) thisCube.appendNewFaceToCubeWrapper();
-    faceChildFirst(thisCube);
+    thisCube.focusFirstChild();
   } else if (event.which == 13) {
     tray.appendCube(that);
     cubeNext(that);
     event.preventDefault();
   } else if (event.which == 8 && prevCube && getCursorPosition(that) === 0 && nothingSelected(that) && thisCube.text === "") {
-    cubePrevAndDelete(thisCube);
+    thisCube.focusPreviousAndDelete()
     event.preventDefault();
   } else if (event.which == 46 && nextCube && getCursorPosition(that) === 0 && nothingSelected(that) && thisCube.text === "") {
-    cubeNextAndDelete(thisCube);
+    thisCube.focusNextAndDelete();
     event.preventDefault();
   } else if (event.which == 38 && prevCube && prevCube.hasFaces() && prevCube.faces.length > 0) {
-    faceChildLast(prevCube);
+    prevCube.focusLastChild();
   } else if (event.which == 38 && prevCube) {
     cubeSetFocusEnd(prevCube);
     event.preventDefault();
   } else if (event.which == 40 && thisCube.hasFaces() && thisCube.faces.length > 0) {
-    faceChildFirst(thisCube);
+    thisCube.focusFirstChild();
     event.preventDefault();
   } else if (event.which == 40 && nextCube) {
     cubeSetFocusEnd(nextCube);

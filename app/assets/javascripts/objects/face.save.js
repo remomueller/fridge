@@ -38,12 +38,7 @@ Face.prototype.save = function(event_type) {
     params._method = "patch";
   }
 
-  var request = new XMLHttpRequest();
-  request.open("POST", url, true);
-  request.setRequestHeader("Accept", "application/json");
-  request.setRequestHeader("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
-  request.setRequestHeader("X-CSRF-Token", csrfToken());
-  // request.setRequestHeader("X-Requested-With", "XMLHttpRequest");
+  var request = Fridge._requestPost(url);
 
   var that = this;
   request.onreadystatechange = function() {
@@ -55,3 +50,14 @@ Face.prototype.save = function(event_type) {
   };
   request.send(serializeForXMLHttpRequest(params));
 };
+
+Face.prototype.destroy = function() {
+  // console.log("face.destroy();");
+  this.destroyed = "true";
+  if (!this.id) return;
+  var params = {};
+  params._method = "delete";
+  var url = this.url + "/" + this.id;
+  Fridge.post(url, params);
+};
+

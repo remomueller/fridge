@@ -53,17 +53,17 @@ Face._eventKeydown = function(event) {
       if (prevFace) thisFace.destroyed = "true"; // TODO: Needs to actually be destroyed as well if it already exists.
       tray.appendCube(that);
       cubeNext(that);
-      if (prevFace) removeFace(thisFace);
+      if (prevFace) thisFace.remove();
     } else {
       thisFace.cube.appendFace(that);
       faceNext(that);
     }
     event.preventDefault();
   } else if (event.which == 8 && prevFace && getCursorPosition(that) == 0 && nothingSelected(that) && thisFace.text == "") {
-    facePrevAndDelete(thisFace);
+    thisFace.focusPreviousAndDelete();
     event.preventDefault();
   } else if (event.which == 46 && nextFace && getCursorPosition(that) == 0 && nothingSelected(that) && thisFace.text == "") {
-    faceNextAndDelete(thisFace);
+    thisFace.focusNextAndDelete();
     event.preventDefault();
   } else if (event.which == 38) {
     if (prevFace) {
@@ -81,7 +81,6 @@ Face._eventKeydown = function(event) {
     boldSelection(that);
     event.preventDefault();
   }
-
 };
 
 Face._eventKeyup = function(event) {
