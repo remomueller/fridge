@@ -6,17 +6,17 @@ function Cube(element) {
 }
 
 Cube.prototype = {
-  // Private getters and functions.
-  get _face_wrappers() {
-    return this.wrapper.querySelectorAll("[data-object~=face-wrapper]");
-  },
-
+  // Private
   _getWrapper: function(element) {
     if (element) {
       return element.closest("[data-object~=cube-wrapper]");
     } else {
       return null;
     }
+  },
+
+  get _faceWrappers() {
+    return this.wrapper.querySelectorAll("[data-object~=face-wrapper]");
   },
 
   _positionChanged: function() {
@@ -32,10 +32,10 @@ Cube.prototype = {
     this.input = null;
   },
 
-  // Public getters, setters, and functions.
+  // Public
   get faces() {
     var that = this;
-    return Array.prototype.map.call(this._face_wrappers, function(element) {
+    return Array.prototype.map.call(this._faceWrappers, function(element) {
       return new Face(element, that);
     });
   },

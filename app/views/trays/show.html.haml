@@ -22,7 +22,7 @@
 %hr
 
 .d-flex.flex-row
-  #cubes.w-100
+  #cubes.w-100{ data: { object: "tray-wrapper" } }
     - @tray.cubes.includes(:tray).each do |cube|
       = render "cubes/wrapper", cube: cube
 
