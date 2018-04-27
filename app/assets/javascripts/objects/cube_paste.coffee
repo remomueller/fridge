@@ -49,5 +49,4 @@
     cube = new Cube(nextElement)
     cube.save("paste")
     setFocusEnd($(nextElement).find(".cube-input")) # TODO: Refactor using cube
-    # facesReady()
   event.preventDefault()
