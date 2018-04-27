@@ -47,6 +47,7 @@ Cube._eventKeydown = function(event) {
   var thisCube = new Cube(that);
   var prevCube = thisCube.prevCube;
   var nextCube = thisCube.nextCube;
+  var cursorPosition = that.selectionStart;
   document.getElementById("output").textContent = event.which; // TODO: Remove key output.
   if (event.which == 13 && thisCube.hasFaces()) {
     if (thisCube.faces.length === 0) thisCube.appendNewFaceToCubeWrapper();
@@ -55,10 +56,10 @@ Cube._eventKeydown = function(event) {
     tray.appendCube(that); // TODO: Change appendCube to be on "cube" not on tray. thisCube.appendCube() with update positions callback;
     thisCube.nextCube.focusEnd(); // Needs to call "thisCube.nextCube" as "nextCube" from above is cached and would jump to wrong cube
     event.preventDefault();
-  } else if (event.which == 8 && prevCube && getCursorPosition(that) === 0 && nothingSelected(that) && thisCube.text === "") {
+  } else if (event.which == 8 && prevCube && cursorPosition === 0 && nothingSelected(that) && thisCube.text === "") {
     thisCube.focusPreviousAndDelete()
     event.preventDefault();
-  } else if (event.which == 46 && nextCube && getCursorPosition(that) === 0 && nothingSelected(that) && thisCube.text === "") {
+  } else if (event.which == 46 && nextCube && cursorPosition === 0 && nothingSelected(that) && thisCube.text === "") {
     thisCube.focusNextAndDelete();
     event.preventDefault();
   } else if (event.which == 38 && prevCube && prevCube.hasFaces() && prevCube.faces.length > 0) {
