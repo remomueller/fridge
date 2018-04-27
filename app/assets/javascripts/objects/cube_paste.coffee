@@ -1,13 +1,13 @@
-@cubePasteEvent = (e) ->
+@cubePasteEvent = (event) ->
   tray = new Tray
 
   pastedText = undefined
-  $element = $(e.target);
+  $element = $(event.target);
 
   if (window.clipboardData && window.clipboardData.getData) # IE
     pastedText = window.clipboardData.getData("Text")
   else
-    clipboardData = (e.originalEvent || e).clipboardData
+    clipboardData = (event.originalEvent || event).clipboardData
     pastedText = clipboardData.getData("text/plain") if (clipboardData && clipboardData.getData)
 
   selection = $element.getSelection()
@@ -50,4 +50,4 @@
     cube.save("paste")
     setFocusEnd($(nextElement).find(".cube-input")) # TODO: Refactor using cube
     facesReady()
-  e.preventDefault()
+  event.preventDefault()
