@@ -2,7 +2,7 @@
   tray = new Tray
 
   pastedText = undefined
-  $element = $(event.target);
+  element = event.target;
 
   if (window.clipboardData && window.clipboardData.getData) # IE
     pastedText = window.clipboardData.getData("Text")
@@ -10,20 +10,20 @@
     clipboardData = (event.originalEvent || event).clipboardData
     pastedText = clipboardData.getData("text/plain") if (clipboardData && clipboardData.getData)
 
-  selection = $element.getSelection()
+  selection = $(element).getSelection()
   if selection
     pos_start = selection.start
     pos_end = selection.end
   else
-    pos_start = pos_end = $element.getCursorPosition()
+    pos_start = pos_end = element.getCursorPosition()
 
-  original_text = $element.val()
+  original_text = element.value
   array = pastedText.split("\n").map((x) -> $.trim(x)).filter((x) -> x.length > 0)
 
-  if array.length == 1 || $element.val() == ""
-    insertTextAtCursor($element, array.shift())
+  if array.length == 1 || element.value == ""
+    insertTextAtCursor(element, array.shift())
 
-  nextElement = $element[0]
+  nextElement = element
   multiline = false
   facePosition = 0
   $.each(array, (index, text) ->
@@ -48,5 +48,5 @@
     # Save last cube
     cube = new Cube(nextElement)
     cube.save("paste")
-    setFocusEnd($(nextElement).find(".cube-input")) # TODO: Refactor using cube
+    cube.focusEnd()
   event.preventDefault()
