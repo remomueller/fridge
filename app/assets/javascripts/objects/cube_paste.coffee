@@ -10,13 +10,6 @@
     clipboardData = (event.originalEvent || event).clipboardData
     pastedText = clipboardData.getData("text/plain") if (clipboardData && clipboardData.getData)
 
-  selection = $(element).getSelection()
-  if selection
-    pos_start = selection.start
-    pos_end = selection.end
-  else
-    pos_start = pos_end = element.getCursorPosition()
-
   original_text = element.value
   array = pastedText.split("\n").map((x) -> $.trim(x)).filter((x) -> x.length > 0)
 

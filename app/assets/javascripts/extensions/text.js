@@ -22,3 +22,14 @@ function nothingSelected(element) {
   var end = element.selectionEnd;
   return start === end;
 }
+
+function insertTextAtCursor(element, text, position) {
+  if (document.execCommand("insertText", false, text)) return;
+
+  // console.log("insertTextAtCursor() fallback (Firefox 59)");
+  var start = element.selectionStart;
+  var end = element.selectionEnd;
+  var originalText = element.value;
+  element.value = originalText.substring(0, start) + text + originalText.substring(end);
+  setFocusPosition(element, position);
+}
