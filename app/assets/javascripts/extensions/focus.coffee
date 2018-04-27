@@ -1,7 +1,7 @@
 # Handles focusing cursor in input fields
 
 @setCursorAtStart = (element) ->
-  $(element)[0].setSelectionRange(0, 0)
+  element.setSelectionRange(0, 0)
 
 @insertTextAtCursor = (element, text) ->
   return if document.execCommand("insertText", false, text)
