@@ -182,7 +182,7 @@ Cube.prototype = {
       this.id
     );
     this.wrapper.querySelector(".cube-faces").appendChild(newElement);
-    facesReady(); // TODO: This calls a jquery function, refactor to enable sorting without.
+    // facesReady(); // TODO: This calls a jquery function, refactor to enable sorting without.
   },
 
   updateFacePositions: function(start) {

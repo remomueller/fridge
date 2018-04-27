@@ -75,3 +75,15 @@
     }
   }
 }
+
+.cube-faces {
+  .face-id {
+    opacity: 0.5;
+  }
+}
+
+.cube-faces.ui-sortable {
+  .face-id {
+    opacity: 1.0;
+  }
+}
