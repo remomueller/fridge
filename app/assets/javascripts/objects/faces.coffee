@@ -15,13 +15,3 @@ $(document)
     # If the cube-faces is not yet sortable, make it sortable (just in time sortable).
     facesEnableSortable(this)
   )
-
-@faceNext = (element) -> # TODO: Remove this function
-  face = new Face(element)
-  faceSetFocusEnd(face.nextFace)
-
-@faceSetFocusEnd = (face) -> # Could be refactored to work for cubes and faces
-  setFocusEnd(face.input) if face && face.input
-
-@faceSetFocusStart = (face) -> # Could be refactored to work for cubes and faces
-  setFocusStart(face.input) if face && face.input

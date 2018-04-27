@@ -164,13 +164,21 @@ Face.prototype = {
 
   focusPreviousAndDelete: function() {
     this.destroyed = "true"; // Make sure face isn't saved on input blur.
-    faceSetFocusEnd(this.prevFace);
+    if (this.prevFace) this.prevFace.focusEnd();
     this.remove();
   },
 
   focusNextAndDelete: function() {
     this.destroyed = "true"; // Make sure face isn't saved on input blur.
-    faceSetFocusStart(this.nextFace);
+    if (this.nextFace) this.nextFace.focusStart();
     this.remove();
+  },
+
+  focusEnd: function() {
+    if (this.input) setFocusEnd(this.input);
+  },
+
+  focusStart: function() {
+    if (this.input) setFocusStart(this.input);
   }
 };

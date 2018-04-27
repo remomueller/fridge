@@ -56,7 +56,7 @@ Face._eventKeydown = function(event) {
       if (prevFace) thisFace.remove();
     } else {
       thisFace.cube.appendFace(that);
-      faceNext(that);
+      thisFace.nextFace.focusEnd(); // Needs to call "thisFace.nextFace" as "nextFace" from above is cached and would jump to wrong face
     }
     event.preventDefault();
   } else if (event.which == 8 && prevFace && getCursorPosition(that) == 0 && nothingSelected(that) && thisFace.text == "") {
@@ -67,13 +67,13 @@ Face._eventKeydown = function(event) {
     event.preventDefault();
   } else if (event.which == 38) {
     if (prevFace) {
-      faceSetFocusEnd(prevFace);
+      prevFace.focusEnd();
     } else {
       thisFace.cube.focusEnd();
     }
     event.preventDefault();
   } else if (event.which == 40 && nextFace) {
-    faceSetFocusEnd(nextFace);
+    nextFace.focusEnd();
     event.preventDefault();
   } else if (event.which == 40 && thisFace.cube.nextCube) {
     thisFace.cube.nextCube.focusEnd();

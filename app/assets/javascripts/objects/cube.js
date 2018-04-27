@@ -250,5 +250,5 @@ Cube.prototype = {
 
   focusStart: function() {
     if (this.input) setFocusStart(this.input);
-  },
+  }
 };
