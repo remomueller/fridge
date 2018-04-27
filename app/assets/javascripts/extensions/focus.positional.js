@@ -1,12 +1,14 @@
 "use strict";
 
 function setFocusEnd(element) {
-  var length = element.value.length;
-  element.focus();
-  element.setSelectionRange(length, length);
+  setFocusPosition(element, element.value.length);
 }
 
 function setFocusStart(element) {
+  setFocusPosition(element, 0);
+}
+
+function setFocusPosition(element, position) {
   element.focus();
-  element.setSelectionRange(0, 0);
+  element.setSelectionRange(position, position)
 }

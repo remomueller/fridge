@@ -1,6 +1,6 @@
 # Handles focusing cursor in input fields
 
-@insertTextAtCursor = (element, text) ->
+@insertTextAtCursor = (element, text, position) ->
   return if document.execCommand("insertText", false, text)
   # Fallback
   selection = $(element).getSelection()
@@ -12,3 +12,4 @@
   else
     # console.log "generic fallback"
     element.value = text
+  setFocusPosition(element, position)
