@@ -1,3 +1,5 @@
+"use strict";
+
 function boldSelection(element) {
   var start = element.selectionStart;
   var end = element.selectionEnd;

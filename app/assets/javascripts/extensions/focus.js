@@ -10,5 +10,5 @@ function setFocusStart(element) {
 
 function setFocusPosition(element, position) {
   element.focus();
-  element.setSelectionRange(position, position)
+  element.setSelectionRange(position, position);
 }

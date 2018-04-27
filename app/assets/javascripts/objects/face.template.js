@@ -43,7 +43,7 @@ Face._template = function(text, position, url, tray, cube) {
   element.appendChild(face_input);
   element.appendChild(face_info);
   return element;
-}
+};
 
 Face.prototype._template = function(text) {
   if (text == null) text = "";

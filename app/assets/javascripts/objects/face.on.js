@@ -50,7 +50,7 @@ Face._eventKeydown = function(event) {
   var cursorPosition = that.selectionStart;
   document.getElementById("output").textContent = event.which; // TODO: Remove key output.
   if (event.which == 13) {
-    if (thisFace.text == "" && !nextFace) {
+    if (thisFace.text === "" && !nextFace) {
       if (prevFace) thisFace.destroyed = "true";
       tray.appendCube(that);
       thisFace.cube.nextCube.focusEnd();
@@ -60,10 +60,10 @@ Face._eventKeydown = function(event) {
       thisFace.nextFace.focusEnd(); // Needs to call "thisFace.nextFace" as "nextFace" from above is cached and would jump to wrong face
     }
     event.preventDefault();
-  } else if (event.which == 8 && prevFace && cursorPosition == 0 && nothingSelected(that) && thisFace.text == "") {
+  } else if (event.which == 8 && prevFace && cursorPosition === 0 && nothingSelected(that) && thisFace.text === "") {
     thisFace.focusPreviousAndDelete();
     event.preventDefault();
-  } else if (event.which == 46 && nextFace && cursorPosition == 0 && nothingSelected(that) && thisFace.text == "") {
+  } else if (event.which == 46 && nextFace && cursorPosition === 0 && nothingSelected(that) && thisFace.text === "") {
     thisFace.focusNextAndDelete();
     event.preventDefault();
   } else if (event.which == 38) {

@@ -10,7 +10,7 @@ Cube.prototype._saveDone = function(request, event_type) {
     this.saving = "false";
     this.redraw();
     if (event_type == "blur") {
-      var tray = new Tray;
+      var tray = new Tray();
       tray.saveCubePositions();
     }
     if (event_type == "paste") {

@@ -57,7 +57,7 @@ Cube._eventKeydown = function(event) {
     thisCube.nextCube.focusEnd(); // Needs to call "thisCube.nextCube" as "nextCube" from above is cached and would jump to wrong cube
     event.preventDefault();
   } else if (event.which == 8 && prevCube && cursorPosition === 0 && nothingSelected(that) && thisCube.text === "") {
-    thisCube.focusPreviousAndDelete()
+    thisCube.focusPreviousAndDelete();
     event.preventDefault();
   } else if (event.which == 46 && nextCube && cursorPosition === 0 && nothingSelected(that) && thisCube.text === "") {
     thisCube.focusNextAndDelete();
