@@ -11,7 +11,7 @@
     pastedText = clipboardData.getData("text/plain") if (clipboardData && clipboardData.getData)
 
   original_text = element.value
-  array = pastedText.split("\n").map((x) -> $.trim(x)).filter((x) -> x.length > 0)
+  array = pastedText.split("\n").map((x) -> x.trim()).filter((x) -> x.length > 0)
 
   if array.length == 1 || element.value == ""
     insertTextAtCursor(element, array.shift())
@@ -27,7 +27,7 @@
         cube.cubeType = "choice"
         cube.redrawCubeType()
       facePosition += 1
-      cube.appendNewFaceToCubeWrapper($.trim(text.slice(1)), facePosition)
+      cube.appendNewFaceToCubeWrapper(text.slice(1).trim(), facePosition)
     else
       nextElement = tray.appendCube(nextElement, text)
       facePosition = 0
