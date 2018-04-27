@@ -5,7 +5,7 @@
     handle: ".face-id"
     placeholder: "face-wrapper-placeholder"
     stop: (event, ui) ->
-      console.log "facesReady() -> stop -> face.cube.updateFacePositions"
+      # console.log "facesReady() -> stop -> face.cube.updateFacePositions"
       cube = new Cube(ui.item[0])
       cube.updateFacePositions()
   )

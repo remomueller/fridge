@@ -88,7 +88,7 @@ Cube.prototype.saveFacePositions = function() {
     changes = true;
   });
 
-  console.log(params);
+  // console.log(params);
   if (!changes) return;
 
   Fridge.post(url, params, this._saveFacePositionsDone, this._saveFacePositionsFail);

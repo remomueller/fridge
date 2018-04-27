@@ -17,10 +17,10 @@ $(document)
     params.cube = {}
     params.cube.cube_type = $(this).val()
     url = "#{$element.data("url")}/#{$element.data("cube")}"
-    console.log "$element.data(\"url\"): #{$element.data("url")}"
-    console.log "$element.data(\"cube\"): #{$element.data("cube")}"
+    # console.log "$element.data(\"url\"): #{$element.data("url")}"
+    # console.log "$element.data(\"cube\"): #{$element.data("cube")}"
     params._method = "patch"
-    console.log params
+    # console.log params
     $.post(
       url
       params
