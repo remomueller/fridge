@@ -64,13 +64,13 @@ Cube._eventKeydown = function(event) {
   } else if (event.which == 38 && prevCube && prevCube.hasFaces() && prevCube.faces.length > 0) {
     prevCube.focusLastChild();
   } else if (event.which == 38 && prevCube) {
-    cubeSetFocusEnd(prevCube);
+    prevCube.focusEnd();
     event.preventDefault();
   } else if (event.which == 40 && thisCube.hasFaces() && thisCube.faces.length > 0) {
     thisCube.focusFirstChild();
     event.preventDefault();
   } else if (event.which == 40 && nextCube) {
-    cubeSetFocusEnd(nextCube);
+    nextCube.focusEnd();
     event.preventDefault();
   } else if (event.which == 66 && event.metaKey) {
     boldSelection(that);
@@ -82,7 +82,6 @@ Cube._eventKeyup = function(event) {
   var cube = new Cube(event.target);
   cube.redrawText(); // Doesn't need a full redraw.
 };
-
 
 Cube._eventPaste = function(event) {
   // TODO: Make cubePasteEvent a part of cube class. cube.pasteEvent(event);

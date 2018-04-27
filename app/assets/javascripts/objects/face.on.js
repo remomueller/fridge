@@ -69,14 +69,14 @@ Face._eventKeydown = function(event) {
     if (prevFace) {
       faceSetFocusEnd(prevFace);
     } else {
-      cubeSetFocusEnd(thisFace.cube);
+      thisFace.cube.focusEnd();
     }
     event.preventDefault();
   } else if (event.which == 40 && nextFace) {
     faceSetFocusEnd(nextFace);
     event.preventDefault();
   } else if (event.which == 40 && thisFace.cube.nextCube) {
-    cubeSetFocusEnd(thisFace.cube.nextCube);
+    thisFace.cube.nextCube.focusEnd();
   } else if (event.which == 66 && event.metaKey) {
     boldSelection(that);
     event.preventDefault();

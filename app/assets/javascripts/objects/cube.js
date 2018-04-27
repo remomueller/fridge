@@ -224,13 +224,13 @@ Cube.prototype = {
 
   focusPreviousAndDelete: function() {
     this.destroyed = "true"; // Make sure cube isn't saved on input blur.
-    cubeSetFocusEnd(this.prevCube);
+    if (this.prevCube) this.prevCube.focusEnd();
     this.remove();
   },
 
   focusNextAndDelete: function() {
     this.destroyed = "true"; // Make sure cube isn't saved on input blur.
-    cubeSetFocusStart(this.nextCube);
+    if (this.nextCube) this.nextCube.focusStart();
     this.remove();
   },
 
@@ -242,5 +242,13 @@ Cube.prototype = {
   focusLastChild: function() {
     var face = this.faces[this.faces.length - 1];
     if (face && face.input) setFocusEnd(face.input);
-  }
+  },
+
+  focusEnd: function() {
+    if (this.input) setFocusEnd(this.input);
+  },
+
+  focusStart: function() {
+    if (this.input) setFocusStart(this.input);
+  },
 };

@@ -11,10 +11,4 @@
 
 @cubeNext = (element) -> # TODO: Remove this function.
   cube = new Cube(element)
-  cubeSetFocusEnd(cube.nextCube)
-
-@cubeSetFocusEnd = (cube) ->
-  setFocusEnd(cube.input) if cube && cube.input
-
-@cubeSetFocusStart = (cube) ->
-  setFocusStart(cube.input) if cube && cube.input
+  cube.nextCube.focusEnd() if cube.nextCube
