@@ -52,8 +52,8 @@ Cube._eventKeydown = function(event) {
     if (thisCube.faces.length === 0) thisCube.appendNewFaceToCubeWrapper();
     thisCube.focusFirstChild();
   } else if (event.which == 13) {
-    tray.appendCube(that);
-    cubeNext(that);
+    tray.appendCube(that); // TODO: Change appendCube to be on "cube" not on tray. thisCube.appendCube() with update positions callback;
+    thisCube.nextCube.focusEnd(); // Needs to call "thisCube.nextCube" as "nextCube" from above is cached and would jump to wrong cube
     event.preventDefault();
   } else if (event.which == 8 && prevCube && getCursorPosition(that) === 0 && nothingSelected(that) && thisCube.text === "") {
     thisCube.focusPreviousAndDelete()

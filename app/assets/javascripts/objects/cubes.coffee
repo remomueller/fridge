@@ -8,7 +8,3 @@
       tray = new Tray
       tray.updateCubePositions()
   )
-
-@cubeNext = (element) -> # TODO: Remove this function.
-  cube = new Cube(element)
-  cube.nextCube.focusEnd() if cube.nextCube

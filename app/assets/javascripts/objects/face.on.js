@@ -50,9 +50,9 @@ Face._eventKeydown = function(event) {
   document.getElementById("output").textContent = event.which; // TODO: Remove key output.
   if (event.which == 13) {
     if (thisFace.text == "" && !nextFace) {
-      if (prevFace) thisFace.destroyed = "true"; // TODO: Needs to actually be destroyed as well if it already exists.
+      if (prevFace) thisFace.destroyed = "true";
       tray.appendCube(that);
-      cubeNext(that);
+      thisFace.cube.nextCube.focusEnd();
       if (prevFace) thisFace.remove();
     } else {
       thisFace.cube.appendFace(that);
