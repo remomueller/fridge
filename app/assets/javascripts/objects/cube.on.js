@@ -84,6 +84,5 @@ Cube._eventKeyup = function(event) {
 };
 
 Cube._eventPaste = function(event) {
-  // TODO: Make cubePasteEvent a part of cube class. cube.pasteEvent(event);
-  cubePasteEvent(event);
+  Cube.paste(event);
 };
