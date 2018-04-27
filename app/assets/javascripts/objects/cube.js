@@ -181,7 +181,8 @@ Cube.prototype = {
       this.wrapper.getAttribute("data-tray"),
       this.id
     );
-    this.wrapper.querySelector(".cube-faces").appendChild(newElement)
+    this.wrapper.querySelector(".cube-faces").appendChild(newElement);
+    facesReady(); // TODO: This calls a jquery function, refactor to enable sorting without.
   },
 
   updateFacePositions: function(start) {
