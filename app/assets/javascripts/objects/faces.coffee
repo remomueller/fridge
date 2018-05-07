@@ -8,6 +8,7 @@
     stop: (event, ui) ->
       cube = new Cube(ui.item[0])
       cube.updateFacePositions()
+      cube.saveFacePositions()
   )
 
 $(document)

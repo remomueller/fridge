@@ -167,6 +167,7 @@ Cube.prototype = {
     var face = new Face(element, this);
     var node = face.appendFace(text);
     this.updateFacePositions(face.position);
+    this.saveFacePositions(face.position);
     return node;
   },
 
