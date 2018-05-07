@@ -27,6 +27,7 @@ Tray.prototype = {
     var cube = new Cube(element);
     var node = cube.appendCube(text);
     this.updateCubePositions(cube.position);
+    this.saveCubePositions(cube.position);
     return node;
   },
 

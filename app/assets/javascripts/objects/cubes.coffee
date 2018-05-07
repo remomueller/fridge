@@ -7,4 +7,5 @@
     stop: (event, ui) ->
       tray = new Tray
       tray.updateCubePositions()
+      tray.saveCubePositions()
   )
