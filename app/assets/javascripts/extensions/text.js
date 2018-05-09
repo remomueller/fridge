@@ -15,7 +15,7 @@ function boldSelection(element) {
     substitute += text.trim();
     substitute += "**";
     if (padding_end) substitute += " ";
-    insertTextAtCursor(element, substitute, start + substitute.length);
+    insertTextAtCursor(element, substitute);
   }
 }
 
@@ -25,11 +25,12 @@ function nothingSelected(element) {
   return start === end;
 }
 
-function insertTextAtCursor(element, text, position) {
+function insertTextAtCursor(element, text) {
   if (document.execCommand("insertText", false, text)) return;
 
-  // console.log("insertTextAtCursor() fallback (Firefox 59)");
+  // console.log("insertTextAtCursor() fallback (Firefox 59 and Firefox 60)");
   var start = element.selectionStart;
+  var position = start + text.length;
   var end = element.selectionEnd;
   var originalText = element.value;
   element.value = originalText.substring(0, start) + text + originalText.substring(end);
